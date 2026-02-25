@@ -17,6 +17,14 @@ export default function ResultsPage() {
     </div>
   )
 
+  if (!data.stats) return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background-light p-8 text-center">
+      <div className="text-4xl font-black uppercase tracking-tighter mb-4 text-red-500 italic">No Stats Found</div>
+      <p className="max-w-md font-bold uppercase tracking-widest text-slate-400 mb-8">The analytical data for this pool is missing or corrupt.</p>
+      <Link href="/upload" className="px-8 py-4 bg-brutal-black text-white font-black uppercase tracking-widest shadow-hard hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">Retry Upload</Link>
+    </div>
+  )
+
   return (
     <div className="bg-background-light min-h-screen text-brutal-black font-sans p-8">
       <div className="max-w-7xl mx-auto">

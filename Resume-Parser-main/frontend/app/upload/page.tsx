@@ -29,6 +29,12 @@ export default function UploadPage() {
                 method: "POST",
                 body: formData,
             })
+            if (!response.ok) {
+                const errorData = await response.json()
+                alert(`Analysis failed: ${errorData.detail || 'Unknown error'}`)
+                setIsUploading(false)
+                return
+            }
             const data = await response.json()
             sessionStorage.setItem("results", JSON.stringify(data))
             router.push("/results")

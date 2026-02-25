@@ -18,6 +18,7 @@ from extraction.online_presence import OnlinePresenceExtractor
 from extraction.extra_curricular import ExtraCurricularExtractor
 from extraction.degree_classifier import DegreeClassifier
 from extraction.college_ranker import CollegeRanker
+from extraction.skill_filter import SkillFilter
 
 class BatchResumeProcessor:
     def __init__(self, model_path="./model"):
@@ -37,7 +38,8 @@ class BatchResumeProcessor:
         self.ec_extractor = ExtraCurricularExtractor()
         self.degree_classifier = DegreeClassifier()
         # Initialize with the directory containing all NIRF CSVs
-        self.college_ranker = CollegeRanker('./data/nirf_data')
+        self.college_ranker = CollegeRanker('./data')
+        self.skill_filter = SkillFilter()
         
         self.executor = ThreadPoolExecutor(max_workers=10)
     
@@ -91,6 +93,10 @@ class BatchResumeProcessor:
             # Extract basic entities from spaCy
             skills = [ent.text for ent in doc.ents if ent.label_ == 'Skill'] if doc else []
             education = [ent.text for ent in doc.ents if ent.label_ == 'Education'] if doc else []
+            
+            # Filter skills to remove college names
+            skills = self.skill_filter.filter_skills(skills, education)
+            
             experience_text = [ent.text for ent in doc.ents if ent.label_ == 'Work_Experience'] if doc else []
             languages = [ent.text for ent in doc.ents if ent.label_ == 'Language'] if doc else []
             

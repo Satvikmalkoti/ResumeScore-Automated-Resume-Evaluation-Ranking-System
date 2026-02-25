@@ -2,7 +2,7 @@ import os
 import time
 import io
 from typing import List, Optional
-from fastapi import FastAPI, UploadFile, File, HTTPException, Request
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
 import pandas as pd
@@ -74,7 +74,7 @@ async def batch_parse(files: List[UploadFile] = File(...)):
 @app.post("/match-job")
 async def match_with_job(
     files: List[UploadFile] = File(...),
-    job_description: str = None
+    job_description: str = Form(...)
 ):
     """Match resumes against job description"""
     if not job_description:
