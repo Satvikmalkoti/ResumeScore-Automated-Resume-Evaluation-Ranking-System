@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Advanced Pool Analytics Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1970c2",
+                        "background-light": "#F4F4F4",
+                        "background-dark": "#111921",
+                        "brutalist-black": "#141414",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "32px",
+                        "full": "9999px"
+                    },
+                    borderWidth: {
+                        "2": "2px",
+                        "17": "17px",
+                    },
+                    boxShadow: {
+                        "hard": "4px 4px 0px 0px #141414",
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; }
+        .brutalist-card {
+            border: 2px solid #141414;
+            background: white;
+            box-shadow: 4px 4px 0px 0px #141414;
+            transition: transform 0.1s ease;
+        }
+        .brutalist-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px #141414;
+        }
+        .dashed-divider {
+            border-top: 2px dashed #141414;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<header class="border-b-2 border-brutalist-black bg-white px-8 py-4 sticky top-0 z-50">
+<div class="max-w-[1400px] mx-auto flex items-center justify-between">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-primary rounded-lg border-2 border-brutalist-black shadow-hard">
+<span class="material-symbols-outlined text-white">analytics</span>
+</div>
+<h2 class="text-2xl font-black uppercase tracking-tighter text-brutalist-black">ResumeRanker</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8 ml-8">
+<a class="font-bold text-sm uppercase hover:text-primary underline decoration-2 underline-offset-4 text-brutalist-black" href="#">Dashboard</a>
+<a class="font-bold text-sm uppercase hover:text-primary text-brutalist-black" href="#">Candidates</a>
+<a class="font-bold text-sm uppercase hover:text-primary text-brutalist-black" href="#">Jobs</a>
+<a class="font-bold text-sm uppercase hover:text-primary text-brutalist-black" href="#">Settings</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-brutalist-black">search</span>
+<input class="pl-10 pr-4 py-2 border-2 border-brutalist-black rounded-lg focus:ring-0 focus:border-primary text-sm font-bold uppercase w-64" placeholder="SEARCH POOL..." type="text"/>
+</div>
+<div class="w-12 h-12 rounded-full border-2 border-brutalist-black bg-primary/20 overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAP50tPB67xcPJ2D00q8S3OomAKHnk75QOdHjlcdtttUwulRAWI5dHNwk5yEZ7DDL-u-MaaPPpkGdenycSyZxiFlcE16uZ-ueTm8RMoAleM0NwwViWhZFgddCaykKS0e-yh9Zh8OMuXWek5m9z03Ws4zHMGH7Z5lEp0kSULsNzliq4Crz48eDScGqM-6fTzTwz3_dpDxXQEg9MW9jvd4teClhRo7eIvSpF5J1PMy-sjHXJAaY-daMFco5P1FA26cZ988PP89W3WvyE"/>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-[1400px] mx-auto p-8 space-y-12">
+<section class="space-y-2">
+<h1 class="text-[55px] font-black leading-none tracking-tight uppercase text-brutalist-black dark:text-slate-100">
+            Candidate Pool Analytics
+        </h1>
+<p class="text-xl font-medium text-slate-600 dark:text-slate-400">Aggregate resume data and skill distribution overview for Q3 Recruitment.</p>
+</section>
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="brutalist-card rounded-xl p-8 flex flex-col justify-between">
+<p class="text-sm font-black uppercase tracking-widest text-slate-500">Avg Score</p>
+<div class="dashed-divider my-4"></div>
+<p class="text-[55px] font-black leading-none text-brutalist-black">82<span class="text-2xl">/100</span></p>
+</div>
+<div class="brutalist-card rounded-xl p-8 flex flex-col justify-between">
+<p class="text-sm font-black uppercase tracking-widest text-slate-500">Top Skill</p>
+<div class="dashed-divider my-4"></div>
+<p class="text-[55px] font-black leading-none text-brutalist-black">PY</p>
+<p class="font-bold uppercase mt-2">Python</p>
+</div>
+<div class="brutalist-card rounded-xl p-8 flex flex-col justify-between">
+<p class="text-sm font-black uppercase tracking-widest text-slate-500">Total Talent</p>
+<div class="dashed-divider my-4"></div>
+<p class="text-[55px] font-black leading-none text-brutalist-black">1.2K</p>
+</div>
+<div class="brutalist-card rounded-xl p-8 flex flex-col justify-between bg-primary/10">
+<p class="text-sm font-black uppercase tracking-widest text-slate-500">Shortlisted</p>
+<div class="dashed-divider my-4"></div>
+<p class="text-[55px] font-black leading-none text-primary">15%</p>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<section class="lg:col-span-8 space-y-8">
+<div class="brutalist-card rounded-xl border-l-17 border-l-primary p-8">
+<div class="flex justify-between items-center mb-10">
+<h2 class="text-2xl font-black uppercase italic">Experience Segments</h2>
+<span class="material-symbols-outlined font-bold">query_stats</span>
+</div>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between font-black uppercase text-sm">
+<span>Entry (0-2y)</span>
+<span>156 CANDIDATES (13%)</span>
+</div>
+<div class="w-full h-8 border-2 border-brutalist-black rounded bg-background-light overflow-hidden">
+<div class="h-full bg-slate-300 w-[13%]"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between font-black uppercase text-sm">
+<span>Mid (3-5y)</span>
+<span>542 CANDIDATES (45%)</span>
+</div>
+<div class="w-full h-8 border-2 border-brutalist-black rounded bg-background-light overflow-hidden">
+<div class="h-full bg-brutalist-black w-[45%]"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between font-black uppercase text-sm">
+<span>Senior (5-8y)</span>
+<span>384 CANDIDATES (32%)</span>
+</div>
+<div class="w-full h-8 border-2 border-brutalist-black rounded bg-background-light overflow-hidden">
+<div class="h-full bg-primary w-[32%]"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between font-black uppercase text-sm">
+<span>Lead (8y+)</span>
+<span>120 CANDIDATES (10%)</span>
+</div>
+<div class="w-full h-8 border-2 border-brutalist-black rounded bg-background-light overflow-hidden">
+<div class="h-full bg-slate-800 w-[10%]"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="brutalist-card rounded-xl border-l-17 border-l-brutalist-black p-8">
+<div class="flex justify-between items-center mb-8">
+<h2 class="text-2xl font-black uppercase italic">Skill Frequency Map</h2>
+<span class="material-symbols-outlined font-bold">grid_view</span>
+</div>
+<div class="flex flex-wrap gap-3 items-center">
+<span class="px-4 py-2 border-4 border-brutalist-black rounded-lg font-black text-2xl uppercase">React.js</span>
+<span class="px-3 py-1.5 border-2 border-brutalist-black rounded-lg font-bold text-lg uppercase">TypeScript</span>
+<span class="px-2 py-1 border border-brutalist-black rounded-lg font-medium text-sm uppercase">Docker</span>
+<span class="px-4 py-2 border-4 border-brutalist-black rounded-lg font-black text-xl uppercase bg-primary text-white">Python</span>
+<span class="px-3 py-1.5 border-2 border-brutalist-black rounded-lg font-bold text-base uppercase">Node.js</span>
+<span class="px-2 py-1 border border-brutalist-black rounded-lg font-medium text-xs uppercase">GraphQL</span>
+<span class="px-4 py-2 border-4 border-brutalist-black rounded-lg font-black text-2xl uppercase">Tailwind</span>
+<span class="px-3 py-1.5 border-2 border-brutalist-black rounded-lg font-bold text-lg uppercase">AWS</span>
+<span class="px-2 py-1 border border-brutalist-black rounded-lg font-medium text-sm uppercase">PostgreSQL</span>
+<span class="px-4 py-2 border-4 border-brutalist-black rounded-lg font-black text-xl uppercase">Next.js</span>
+<span class="px-3 py-1.5 border-2 border-brutalist-black rounded-lg font-bold text-base uppercase">Rust</span>
+<span class="px-2 py-1 border border-brutalist-black rounded-lg font-medium text-xs uppercase">Redis</span>
+<span class="px-3 py-1.5 border-2 border-brutalist-black rounded-lg font-bold text-lg uppercase">Kubernetes</span>
+<span class="px-4 py-2 border-4 border-brutalist-black rounded-lg font-black text-2xl uppercase border-primary text-primary">System Design</span>
+<span class="px-2 py-1 border border-brutalist-black rounded-lg font-medium text-sm uppercase">CI/CD</span>
+</div>
+<div class="dashed-divider mt-8 pt-4">
+<p class="text-sm font-bold uppercase opacity-60">Visual weight indicates occurrences across 1,200 candidates.</p>
+</div>
+</div>
+<div class="brutalist-card rounded-xl border-l-17 border-l-slate-800 p-8">
+<div class="flex justify-between items-center mb-10">
+<h2 class="text-2xl font-black uppercase italic">Score Distribution</h2>
+<span class="material-symbols-outlined font-bold">bar_chart</span>
+</div>
+<div class="flex items-end gap-4 h-64 w-full px-4">
+<div class="group relative flex-1 bg-brutalist-black rounded-t-lg" style="height: 20%;">
+<span class="absolute -top-8 left-1/2 -translate-x-1/2 text-xs font-bold">0-20</span>
+</div>
+<div class="group relative flex-1 bg-brutalist-black rounded-t-lg" style="height: 35%;">
+<span class="absolute -top-8 left-1/2 -translate-x-1/2 text-xs font-bold">21-40</span>
+</div>
+<div class="group relative flex-1 bg-brutalist-black rounded-t-lg" style="height: 65%;">
+<span class="absolute -top-8 left-1/2 -translate-x-1/2 text-xs font-bold">41-60</span>
+</div>
+<div class="group relative flex-1 bg-primary rounded-t-lg border-x-2 border-t-2 border-brutalist-black" style="height: 95%;">
+<span class="absolute -top-8 left-1/2 -translate-x-1/2 text-xs font-bold text-primary">61-80</span>
+</div>
+<div class="group relative flex-1 bg-brutalist-black rounded-t-lg" style="height: 50%;">
+<span class="absolute -top-8 left-1/2 -translate-x-1/2 text-xs font-bold">81-100</span>
+</div>
+</div>
+<div class="dashed-divider mt-8 pt-4">
+<p class="text-sm font-bold uppercase opacity-60">Insight: 65% of candidates fall in the 61-80 percentile.</p>
+</div>
+</div>
+</section>
+<aside class="lg:col-span-4 space-y-8">
+<div class="brutalist-card rounded-xl border-l-17 border-l-primary p-8 bg-primary/5">
+<div class="flex justify-between items-center mb-8">
+<h2 class="text-2xl font-black uppercase italic">Elite Performers</h2>
+<span class="material-symbols-outlined font-bold text-primary">workspace_premium</span>
+</div>
+<div class="space-y-6">
+<div class="p-4 border-2 border-brutalist-black rounded-lg bg-white shadow-hard">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-black uppercase bg-brutalist-black text-white px-2 py-0.5 rounded">Rank #1</span>
+<span class="text-2xl font-black text-primary">98/100</span>
+</div>
+<p class="font-black uppercase text-lg">Alex Rivera</p>
+<p class="text-xs font-bold text-slate-500 uppercase">React • Node • AWS</p>
+</div>
+<div class="p-4 border-2 border-brutalist-black rounded-lg bg-white shadow-hard">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-black uppercase bg-brutalist-black text-white px-2 py-0.5 rounded">Rank #2</span>
+<span class="text-2xl font-black text-primary">96/100</span>
+</div>
+<p class="font-black uppercase text-lg">Jordan Smith</p>
+<p class="text-xs font-bold text-slate-500 uppercase">Python • Go • Kubernetes</p>
+</div>
+<div class="p-4 border-2 border-brutalist-black rounded-lg bg-white shadow-hard">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-black uppercase bg-brutalist-black text-white px-2 py-0.5 rounded">Rank #3</span>
+<span class="text-2xl font-black text-primary">95/100</span>
+</div>
+<p class="font-black uppercase text-lg">Sarah Chen</p>
+<p class="text-xs font-bold text-slate-500 uppercase">TypeScript • Rust • GraphQL</p>
+</div>
+</div>
+</div>
+<div class="brutalist-card rounded-xl border-l-17 border-l-slate-400 p-8">
+<div class="flex justify-between items-center mb-8">
+<h2 class="text-2xl font-black uppercase italic">Top Colleges</h2>
+<span class="material-symbols-outlined font-bold">school</span>
+</div>
+<div class="space-y-8">
+<div class="flex items-center gap-4 group cursor-pointer">
+<div class="w-12 h-12 flex items-center justify-center border-2 border-brutalist-black font-black text-xl rounded-lg bg-white shadow-hard group-hover:bg-primary group-hover:text-white shrink-0">01</div>
+<div>
+<p class="font-black uppercase leading-tight">Stanford University</p>
+<p class="text-xs font-bold text-slate-500 uppercase">124 CANDIDATES</p>
+</div>
+</div>
+<div class="dashed-divider"></div>
+<div class="flex items-center gap-4 group cursor-pointer">
+<div class="w-12 h-12 flex items-center justify-center border-2 border-brutalist-black font-black text-xl rounded-lg bg-white shadow-hard group-hover:bg-primary group-hover:text-white shrink-0">02</div>
+<div>
+<p class="font-black uppercase leading-tight">MIT Tech</p>
+<p class="text-xs font-bold text-slate-500 uppercase">98 CANDIDATES</p>
+</div>
+</div>
+<div class="dashed-divider"></div>
+<div class="flex items-center gap-4 group cursor-pointer">
+<div class="w-12 h-12 flex items-center justify-center border-2 border-brutalist-black font-black text-xl rounded-lg bg-white shadow-hard group-hover:bg-primary group-hover:text-white shrink-0">03</div>
+<div>
+<p class="font-black uppercase leading-tight">Carnegie Mellon</p>
+<p class="text-xs font-bold text-slate-500 uppercase">87 CANDIDATES</p>
+</div>
+</div>
+<button class="w-full mt-4 py-4 border-2 border-brutalist-black rounded-lg font-black uppercase shadow-hard bg-white hover:bg-slate-50 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all">
+                        VIEW FULL REPORT
+                    </button>
+</div>
+</div>
+</aside>
+</div>
+<section class="brutalist-card rounded-xl p-8 bg-brutalist-black text-white">
+<div class="flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="space-y-2">
+<h3 class="text-3xl font-black uppercase italic">Export Aggregate Data</h3>
+<p class="font-bold text-slate-400">Download the complete candidate pool analysis as PDF, CSV or JSON.</p>
+</div>
+<div class="flex flex-wrap gap-4">
+<button class="px-8 py-3 bg-primary border-2 border-white rounded-lg font-black uppercase flex items-center gap-2 hover:bg-primary/80">
+<span class="material-symbols-outlined">download</span> PDF
+                </button>
+<button class="px-8 py-3 bg-white text-brutalist-black border-2 border-white rounded-lg font-black uppercase flex items-center gap-2 hover:bg-slate-200">
+<span class="material-symbols-outlined">table_view</span> CSV
+                </button>
+</div>
+</div>
+</section>
+</main>
+<footer class="max-w-[1400px] mx-auto p-8 border-t-2 border-brutalist-black/10 mt-12 flex justify-between items-center">
+<p class="font-bold text-sm uppercase text-slate-500">© 2024 RESUMERANKER V2.0 // BRUTALIST ANALYTICS ENGINE</p>
+<div class="flex gap-6">
+<a class="text-xs font-black uppercase hover:underline text-brutalist-black" href="#">Support</a>
+<a class="text-xs font-black uppercase hover:underline text-brutalist-black" href="#">API Docs</a>
+<a class="text-xs font-black uppercase hover:underline text-brutalist-black" href="#">Privacy</a>
+</div>
+</footer>
+
+</body></html>

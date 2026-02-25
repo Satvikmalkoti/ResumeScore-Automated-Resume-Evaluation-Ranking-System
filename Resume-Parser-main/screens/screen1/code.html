@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Upload &amp; Process Resumes - ResumeRanker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1970c2",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111921",
+                        "neutral-dark": "#141414",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Roboto", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .brutalist-card {
+            border: 2px solid #141414;
+            border-radius: 2rem; /* 32px */
+            background: white;
+        }
+        .brutalist-shadow {
+            box-shadow: 4px 4px 0px 0px #141414;
+        }
+        .custom-checkbox:checked {
+            background-color: #1970c2;
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between px-10 py-6 bg-white border-b-2 border-neutral-dark mb-8">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl font-bold">star_rate</span>
+<h1 class="text-2xl font-extrabold tracking-tighter uppercase italic">ResumeRanker</h1>
+</div>
+<div class="flex items-center gap-8">
+<a class="flex items-center gap-2 text-sm font-bold uppercase tracking-wider hover:underline decoration-2 underline-offset-4" href="#">
+<span class="material-symbols-outlined text-sm">arrow_back</span> Back
+            </a>
+<div class="flex items-center gap-4">
+<button class="flex min-w-[100px] items-center justify-center rounded-full h-10 px-6 bg-primary text-white text-sm font-black uppercase tracking-widest brutalist-shadow border-2 border-neutral-dark">
+                    Guest
+                </button>
+<div class="bg-primary/20 border-2 border-neutral-dark rounded-full size-10 overflow-hidden" data-alt="Abstract geometric user avatar profile placeholder">
+<img alt="Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3U9VkiuLDZgsxduNIwTc4RzJzniDxBvrBf1j7QkYEiJfS6gI05Ytdoi69V0otq7CQnhFjjqPVmamxmkQ424mtOODZ4BFECXpWl-2T1sRJ1o0GwX_hZXB8L_hzKvq54KxI3RXdo3eNNeVibRssxmmWz1lzkCnwl7XceTITsyxGcEpEA28I4c3CxUWVl9fBmZ5RCiz60faxzfyyGAHmy_QHt-Fq1hqlac2F52fX54Ay4dlrHwH3V3TAlqylruNXOG7PqCCkxG7w_Vs"/>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-6xl mx-auto px-6 pb-24 flex flex-col gap-8">
+<!-- Upload Zone -->
+<div class="brutalist-card p-12 border-dashed border-4 border-primary/40 bg-white/50 flex flex-col items-center justify-center text-center gap-4">
+<div class="bg-primary/10 p-6 rounded-full border-2 border-neutral-dark">
+<span class="material-symbols-outlined text-5xl text-primary">cloud_upload</span>
+</div>
+<div>
+<h2 class="text-2xl font-black uppercase mb-1">Upload Resumes</h2>
+<p class="font-body text-slate-600">Drag and drop your PDF or DOCX files here</p>
+</div>
+<button class="mt-4 px-8 py-3 bg-white border-2 border-neutral-dark rounded-full font-bold uppercase tracking-tight brutalist-shadow hover:translate-y-[-2px] transition-transform">
+                Select Files
+            </button>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- File List Section -->
+<div class="lg:col-span-2 flex flex-col gap-6">
+<div class="brutalist-card overflow-hidden">
+<div class="px-6 py-4 border-b-2 border-neutral-dark bg-slate-50 flex justify-between items-center">
+<h3 class="font-black uppercase text-sm tracking-widest">Uploaded Files (2)</h3>
+<span class="text-xs font-bold px-3 py-1 bg-primary/10 rounded-full border border-primary text-primary">BATCH #402</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body">
+<thead>
+<tr class="border-b-2 border-neutral-dark/10">
+<th class="p-4 w-12"><input class="custom-checkbox h-5 w-5 border-2 border-neutral-dark rounded focus:ring-0" type="checkbox"/></th>
+<th class="p-4 uppercase text-xs font-black tracking-widest text-slate-500">File Name</th>
+<th class="p-4 uppercase text-xs font-black tracking-widest text-slate-500">Size</th>
+<th class="p-4 uppercase text-xs font-black tracking-widest text-slate-500">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-neutral-dark/5 hover:bg-slate-50">
+<td class="p-4"><input checked="" class="custom-checkbox h-5 w-5 border-2 border-neutral-dark rounded focus:ring-0" type="checkbox"/></td>
+<td class="p-4 font-bold">software_engineer_resume.pdf</td>
+<td class="p-4 text-slate-500">1.2 MB</td>
+<td class="p-4">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-black bg-green-100 text-green-700 border border-green-700">READY</span>
+</td>
+</tr>
+<tr class="border-b border-neutral-dark/5 hover:bg-slate-50">
+<td class="p-4"><input checked="" class="custom-checkbox h-5 w-5 border-2 border-neutral-dark rounded focus:ring-0" type="checkbox"/></td>
+<td class="p-4 font-bold">product_designer_cv.pdf</td>
+<td class="p-4 text-slate-500">850 KB</td>
+<td class="p-4">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-black bg-green-100 text-green-700 border border-green-700">READY</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Job Description Card -->
+<div class="brutalist-card p-8">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-black uppercase italic">Job Description</h3>
+<div class="flex items-center gap-3">
+<span class="text-xs font-bold uppercase">AI Parsing</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary border-2 border-neutral-dark"></div>
+</label>
+</div>
+</div>
+<textarea class="w-full h-48 p-4 font-body border-2 border-neutral-dark rounded-xl focus:ring-primary focus:border-primary brutalist-shadow" placeholder="Paste the target job description here to rank resumes against..."></textarea>
+</div>
+</div>
+<!-- Configuration Sidebar -->
+<div class="flex flex-col gap-8">
+<!-- Scoring Weights Section -->
+<div class="brutalist-card p-0 overflow-hidden relative border-l-[17px] border-l-primary">
+<div class="p-6">
+<h3 class="text-xl font-black uppercase mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined">tune</span> Scoring Weights
+                        </h3>
+<div class="space-y-8">
+<div class="space-y-3">
+<div class="flex justify-between font-bold text-sm uppercase">
+<span>Technical Skills</span>
+<span class="text-primary">80%</span>
+</div>
+<input class="w-full h-3 bg-slate-200 rounded-full appearance-none cursor-pointer accent-primary border border-neutral-dark" type="range" value="80"/>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between font-bold text-sm uppercase">
+<span>Experience</span>
+<span class="text-primary">65%</span>
+</div>
+<input class="w-full h-3 bg-slate-200 rounded-full appearance-none cursor-pointer accent-primary border border-neutral-dark" type="range" value="65"/>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between font-bold text-sm uppercase">
+<span>Education</span>
+<span class="text-primary">30%</span>
+</div>
+<input class="w-full h-3 bg-slate-200 rounded-full appearance-none cursor-pointer accent-primary border border-neutral-dark" type="range" value="30"/>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between font-bold text-sm uppercase">
+<span>Soft Skills</span>
+<span class="text-primary">50%</span>
+</div>
+<input class="w-full h-3 bg-slate-200 rounded-full appearance-none cursor-pointer accent-primary border border-neutral-dark" type="range" value="50"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Summary Info -->
+<div class="brutalist-card p-6 bg-yellow-50">
+<h4 class="font-black uppercase text-xs mb-4 tracking-tighter">Processing Summary</h4>
+<div class="space-y-2 font-body text-sm">
+<div class="flex justify-between">
+<span>Selected Resumes</span>
+<span class="font-black italic">25</span>
+</div>
+<div class="flex justify-between">
+<span>Tokens Est.</span>
+<span class="font-black italic">14.2k</span>
+</div>
+<div class="flex justify-between pt-2 border-t border-neutral-dark/10">
+<span>Cost Est.</span>
+<span class="font-black italic text-primary">$0.42</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Action Button -->
+<button class="w-full h-[90px] bg-neutral-dark text-white text-2xl font-black uppercase tracking-[0.2em] rounded-xl flex items-center justify-center gap-4 brutalist-shadow hover:translate-y-[-2px] hover:translate-x-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(25,112,194,1)] transition-all">
+            PROCESS 25 RESUMES
+            <span class="material-symbols-outlined text-3xl">bolt</span>
+</button>
+</main>
+<!-- Footer Meta -->
+<footer class="max-w-6xl mx-auto px-10 py-12 border-t-2 border-neutral-dark/10 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-2 opacity-50">
+<span class="material-symbols-outlined">verified_user</span>
+<span class="text-xs font-black uppercase tracking-widest">Enterprise Encrypted Processing</span>
+</div>
+<div class="flex gap-8 text-xs font-bold uppercase tracking-widest">
+<a class="hover:text-primary" href="#">Docs</a>
+<a class="hover:text-primary" href="#">Privacy</a>
+<a class="hover:text-primary" href="#">Support</a>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1970c2",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111921",
+                        "brutal-black": "#141414",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .brutal-border { border: 2px solid #141414; }
+        .brutal-shadow { box-shadow: 4px 4px 0px #141414; }
+        .brutal-shadow-sm { box-shadow: 2px 2px 0px #141414; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-[1200px] mx-auto px-6 py-8">
+<!-- Navigation -->
+<nav class="flex items-center justify-between mb-12 border-b-2 border-brutal-black pb-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-primary brutal-border flex items-center justify-center text-white">
+<span class="material-symbols-outlined">star</span>
+</div>
+<h1 class="text-2xl font-black uppercase tracking-tighter">ResumeRanker</h1>
+</div>
+<div class="flex items-center gap-8 font-bold uppercase text-sm">
+<a class="hover:text-primary transition-colors" href="#">Candidates</a>
+<a class="hover:text-primary transition-colors" href="#">Jobs</a>
+<a class="hover:text-primary transition-colors" href="#">Analytics</a>
+<div class="flex items-center gap-4 ml-4">
+<button class="w-10 h-10 brutal-border flex items-center justify-center hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full brutal-border bg-slate-200 overflow-hidden" data-alt="User profile placeholder">
+<img alt="User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAri0XJrfcRfPUpbfZbbxRYpQutbksMPebOaqzDB31rVayMBHI9ZezpVFoVjxfOw4nFE7ip6Q0NNisjtmEnquudPRy6RWHHO0r9Iw2vc4AJRFy_5PVCbuPnkI08JkkZRZ6f4v7_7AKroFP6Mf-AqNSYz-hawthOd0jCoj1RYfBi_KMOCvyrQhT16YO56S65IfOOlyDBz11fbJSzqpzSVjIoPES6dbwGDjsjlru6HTWEQZ0gjahiZPHhnTcpbqeyLgkryaV7OKY74fs"/>
+</div>
+</div>
+</div>
+</nav>
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 mb-8 text-sm font-bold uppercase tracking-wider">
+<a class="text-slate-500 hover:text-brutal-black" href="#">Candidates</a>
+<span class="material-symbols-outlined text-xs">arrow_forward_ios</span>
+<span class="text-primary">Alex Rivera</span>
+</div>
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column: Profile & Stats -->
+<div class="col-span-12 lg:col-span-4 space-y-8">
+<!-- Header Card -->
+<div class="bg-white p-6 brutal-border brutal-shadow">
+<div class="flex items-start justify-between mb-8">
+<div class="w-14 h-14 brutal-border p-0.5 overflow-hidden">
+<img alt="Candidate Avatar" class="w-full h-full object-cover" data-alt="Professional portrait of Alex Rivera" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6k5l2q8EDPTa6_ZsG6oqKfQ69sTk4VK9jKKIQtgGq7XHvQZ1OSDr4_ZFagLmJEg9ms4XunXEf_4GjJopNC6v-EbuvGFDQ5qG3u_1uucKa7s-FtaaUprHj3wSbRrzOHhxQMGGdRIOHPj9qCnI4sgSSn9Ez_hUL2DoGrob_k1lLGRirWcAkbNUc9BoaOgfxQ3QEVNcilXqjfirXDSUDVeWJ_iJcBxcbFLiRltsrHpOK3t_AGIqR3ZLjEh_S1Jcr2kOqHeRRCgFBrOY"/>
+</div>
+<div class="flex flex-col items-end">
+<span class="bg-emerald-400 brutal-border px-2 py-1 text-[10px] font-black uppercase mb-2">Available</span>
+<div class="flex gap-2">
+<button class="w-8 h-8 brutal-border flex items-center justify-center hover:bg-slate-100"><span class="material-symbols-outlined text-sm">download</span></button>
+<button class="w-8 h-8 brutal-border flex items-center justify-center hover:bg-slate-100"><span class="material-symbols-outlined text-sm">mail</span></button>
+</div>
+</div>
+</div>
+<h2 class="text-3xl font-black uppercase mb-1">Alex Rivera</h2>
+<p class="text-slate-500 font-bold uppercase text-xs tracking-widest mb-6">Senior Software Engineer</p>
+<div class="grid grid-cols-3 gap-2 border-t-2 border-brutal-black pt-6">
+<div class="text-center">
+<p class="text-xs font-bold text-slate-500 uppercase mb-1">Score</p>
+<p class="text-2xl font-black">98</p>
+</div>
+<div class="text-center border-x-2 border-slate-100">
+<p class="text-xs font-bold text-slate-500 uppercase mb-1">Rank</p>
+<p class="text-2xl font-black">#4</p>
+</div>
+<div class="text-center">
+<p class="text-xs font-bold text-slate-500 uppercase mb-1">Match</p>
+<p class="text-2xl font-black">95%</p>
+</div>
+</div>
+</div>
+<!-- Score Breakdown -->
+<div class="bg-white brutal-border border-l-[17px] border-l-primary p-6 brutal-shadow">
+<h3 class="text-xl font-black uppercase mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined">analytics</span>
+                        Score Breakdown
+                    </h3>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between text-xs font-bold uppercase mb-2">
+<span>Internships</span>
+<span>20 / 20</span>
+</div>
+<div class="h-4 brutal-border bg-slate-100 overflow-hidden">
+<div class="h-full bg-primary brutal-border -ml-[2px] -mt-[2px]" style="width: 100%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs font-bold uppercase mb-2">
+<span>Core Skills</span>
+<span>38 / 40</span>
+</div>
+<div class="h-4 brutal-border bg-slate-100 overflow-hidden">
+<div class="h-full bg-primary brutal-border -ml-[2px] -mt-[2px]" style="width: 95%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs font-bold uppercase mb-2">
+<span>Experience</span>
+<span>25 / 25</span>
+</div>
+<div class="h-4 brutal-border bg-slate-100 overflow-hidden">
+<div class="h-full bg-primary brutal-border -ml-[2px] -mt-[2px]" style="width: 100%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs font-bold uppercase mb-2">
+<span>Education</span>
+<span>15 / 15</span>
+</div>
+<div class="h-4 brutal-border bg-slate-100 overflow-hidden">
+<div class="h-full bg-primary brutal-border -ml-[2px] -mt-[2px]" style="width: 100%"></div>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full bg-primary text-white font-black uppercase py-4 brutal-border brutal-shadow hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                    Schedule Interview
+                </button>
+</div>
+<!-- Right Column: Extracted Info -->
+<div class="col-span-12 lg:col-span-8">
+<div class="bg-white brutal-border brutal-shadow min-h-full">
+<div class="p-8 border-b-2 border-dashed border-brutal-black">
+<h3 class="text-xl font-black uppercase mb-6">Skills &amp; Proficiencies</h3>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 brutal-border brutal-shadow-sm text-sm font-bold uppercase bg-primary/10">TypeScript</span>
+<span class="px-3 py-1 brutal-border brutal-shadow-sm text-sm font-bold uppercase bg-primary/10">React/Next.js</span>
+<span class="px-3 py-1 brutal-border brutal-shadow-sm text-sm font-bold uppercase bg-primary/10">Node.js</span>
+<span class="px-3 py-1 brutal-border brutal-shadow-sm text-sm font-bold uppercase bg-slate-100">PostgreSQL</span>
+<span class="px-3 py-1 brutal-border brutal-shadow-sm text-sm font-bold uppercase bg-slate-100">GraphQL</span>
+<span class="px-3 py-1 brutal-border brutal-shadow-sm text-sm font-bold uppercase bg-slate-100">AWS Lambda</span>
+<span class="px-3 py-1 brutal-border brutal-shadow-sm text-sm font-bold uppercase bg-slate-100">Docker</span>
+<span class="px-3 py-1 brutal-border brutal-shadow-sm text-sm font-bold uppercase bg-slate-100">Kubernetes</span>
+</div>
+</div>
+<div class="p-8 border-b-2 border-dashed border-brutal-black">
+<h3 class="text-xl font-black uppercase mb-6">Key Projects</h3>
+<div class="space-y-6">
+<div class="group">
+<div class="flex items-center justify-between mb-2">
+<h4 class="font-black uppercase text-lg group-hover:text-primary transition-colors">Distributed Task Engine</h4>
+<span class="text-xs font-bold text-slate-400">2023</span>
+</div>
+<p class="text-sm text-slate-600 leading-relaxed font-medium">Built a high-performance distributed task scheduler using Go and Redis, handling over 1M events per hour with sub-50ms latency. Reduced cloud infrastructure costs by 22%.</p>
+</div>
+<div class="group">
+<div class="flex items-center justify-between mb-2">
+<h4 class="font-black uppercase text-lg group-hover:text-primary transition-colors">Open Source Auth Core</h4>
+<span class="text-xs font-bold text-slate-400">2022</span>
+</div>
+<p class="text-sm text-slate-600 leading-relaxed font-medium">Lead contributor to a modular authentication library for Next.js. Implemented WebAuthn support and secure session management. 5k+ GitHub stars.</p>
+</div>
+</div>
+</div>
+<div class="p-8 border-b-2 border-dashed border-brutal-black">
+<h3 class="text-xl font-black uppercase mb-8">Work Experience</h3>
+<div class="space-y-10 relative">
+<!-- Timeline Line -->
+<div class="absolute left-0 top-2 bottom-2 w-0.5 bg-brutal-black/10 ml-3"></div>
+<div class="relative pl-10">
+<div class="absolute left-0 top-1.5 w-6 h-6 brutal-border bg-primary brutal-shadow-sm"></div>
+<div class="flex items-center justify-between mb-2">
+<h4 class="font-black uppercase">Senior Engineer @ TechFlow Systems</h4>
+<span class="text-xs font-bold uppercase px-2 py-0.5 brutal-border bg-slate-100">2021 — Present</span>
+</div>
+<p class="text-sm text-slate-600 leading-relaxed">Leading the platform infrastructure team. Migrated monolith to microservices architecture improving developer velocity by 40%.</p>
+</div>
+<div class="relative pl-10">
+<div class="absolute left-0 top-1.5 w-6 h-6 brutal-border bg-white brutal-shadow-sm"></div>
+<div class="flex items-center justify-between mb-2">
+<h4 class="font-black uppercase">Software Engineer @ Innovate AI</h4>
+<span class="text-xs font-bold uppercase px-2 py-0.5 brutal-border bg-slate-100">2018 — 2021</span>
+</div>
+<p class="text-sm text-slate-600 leading-relaxed">Developed internal dashboard for data visualization and managed CI/CD pipelines for 15+ repository environments.</p>
+</div>
+</div>
+</div>
+<div class="p-8">
+<h3 class="text-xl font-black uppercase mb-6">Education</h3>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 brutal-border bg-slate-50 flex items-center justify-center">
+<span class="material-symbols-outlined text-brutal-black">school</span>
+</div>
+<div>
+<h4 class="font-black uppercase">B.S. Computer Science</h4>
+<p class="text-sm font-bold text-slate-500 uppercase">University of California, Berkeley • 2014 — 2018</p>
+<p class="mt-2 text-sm text-slate-600 font-medium italic">Graduated with High Honors (GPA: 3.92)</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-16 py-8 border-t-2 border-brutal-black text-center">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400">© 2024 ResumeRanker — System Status: Operational</p>
+</footer>
+</div>
+</body></html>

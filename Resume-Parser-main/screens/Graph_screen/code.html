@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Detailed Analytics Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#141414",
+                        "card-bg": "#F9FAFB",
+                        "background": "#F4F4F4",
+                        "brutalist-black": "#141414",
+                        "accent-red": "#EF4444"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "xl": "32px",
+                    },
+                    borderWidth: {
+                        "2": "2px",
+                        "17": "17px",
+                    },
+                    boxShadow: {
+                        "hard": "4px 4px 0px 0px #141414",
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; background-color: #F4F4F4; }
+        .brutalist-card {
+            border: 2px solid #141414;
+            background: #F9FAFB;
+            box-shadow: 4px 4px 0px 0px #141414;
+            border-radius: 32px;
+        }
+        .chart-label {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #141414;
+        }
+        .tooltip {
+            border: 2px solid #141414;
+            background: white;
+            box-shadow: 4px 4px 0px 0px #141414;
+            padding: 8px;
+            position: absolute;
+            z-index: 10;
+        }
+        .recharts-bar {
+            fill: #141414;
+        }
+        .dashed-line {
+            border-top: 2px dashed #EF4444;
+        }
+    </style>
+</head>
+<body class="font-display text-brutalist-black min-h-screen">
+<header class="border-b-2 border-brutalist-black bg-white px-8 py-4 sticky top-0 z-50">
+<div class="max-w-[1440px] mx-auto flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-brutalist-black rounded-lg border-2 border-brutalist-black">
+<span class="material-symbols-outlined text-white">analytics</span>
+</div>
+<h2 class="text-2xl font-black uppercase tracking-tighter">ResumeRanker</h2>
+</div>
+<div class="flex gap-4">
+<div class="uppercase font-black text-sm tracking-widest border-2 border-brutalist-black px-4 py-2 rounded-xl">Pool Analytics // Q3 2024</div>
+</div>
+</div>
+</header>
+<main class="max-w-[1440px] mx-auto p-8 space-y-8">
+<div class="grid grid-cols-4 gap-6">
+<div class="brutalist-card p-6 flex flex-col justify-between min-h-[160px]">
+<div>
+<p class="chart-label opacity-60">Avg Score</p>
+<p class="text-4xl font-black mt-1">76.4<span class="text-lg opacity-40">/100</span></p>
+</div>
+<div class="h-12 w-full flex items-end gap-1">
+<div class="bg-brutalist-black w-full h-[30%]"></div>
+<div class="bg-brutalist-black w-full h-[45%]"></div>
+<div class="bg-brutalist-black w-full h-[35%]"></div>
+<div class="bg-brutalist-black w-full h-[60%]"></div>
+<div class="bg-brutalist-black w-full h-[55%]"></div>
+<div class="bg-brutalist-black w-full h-[80%]"></div>
+<div class="bg-brutalist-black w-full h-[76%]"></div>
+</div>
+</div>
+<div class="brutalist-card p-6 flex flex-col justify-between min-h-[160px]">
+<div>
+<p class="chart-label opacity-60">Processing Speed</p>
+<p class="text-4xl font-black mt-1">2.8s</p>
+</div>
+<div class="flex justify-center items-center">
+<div class="relative w-16 h-16 rounded-full border-[6px] border-slate-200 flex items-center justify-center">
+<div class="absolute inset-0 border-[6px] border-brutalist-black rounded-full border-t-transparent border-r-transparent -rotate-45"></div>
+<span class="material-symbols-outlined text-sm font-black">bolt</span>
+</div>
+</div>
+</div>
+<div class="brutalist-card p-6 flex flex-col justify-between min-h-[160px]">
+<div>
+<p class="chart-label opacity-60">Top Score</p>
+<p class="text-4xl font-black mt-1">92.5</p>
+</div>
+<div class="h-12 w-full relative">
+<svg class="w-full h-full preserve-3d" viewBox="0 0 100 40">
+<path d="M0 40 L0 30 Q 25 10, 50 25 T 100 5 L 100 40 Z" fill="#141414" fill-opacity="0.1"></path>
+<path d="M0 30 Q 25 10, 50 25 T 100 5" fill="none" stroke="#141414" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<div class="brutalist-card p-6 flex flex-col justify-between min-h-[160px]">
+<div>
+<p class="chart-label opacity-60">Pass Rate</p>
+<p class="text-4xl font-black mt-1">68%</p>
+</div>
+<div class="flex justify-center">
+<div class="w-14 h-14 rounded-full border-[10px] border-brutalist-black relative">
+<div class="absolute -inset-[10px] border-[10px] border-slate-200 rounded-full border-b-transparent border-l-transparent border-r-transparent rotate-45"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-8">
+<div class="col-span-7 brutalist-card border-l-17 border-l-brutalist-black p-8">
+<h3 class="chart-label text-lg mb-8">Score Distribution</h3>
+<div class="h-[300px] flex items-end justify-between px-4 pb-8 border-b-2 border-brutalist-black relative">
+<div class="absolute left-0 top-0 h-full flex flex-col justify-between chart-label opacity-40 -translate-x-full pr-4">
+<span>100</span><span>75</span><span>50</span><span>25</span><span>0</span>
+</div>
+<div class="w-12 bg-brutalist-black group relative" style="height: 40%">
+<div class="hidden group-hover:block tooltip -top-12 left-0 whitespace-nowrap chart-label">240 CANDIDATES</div>
+</div>
+<div class="w-12 bg-brutalist-black group relative" style="height: 65%"></div>
+<div class="w-12 bg-brutalist-black group relative" style="height: 85%"></div>
+<div class="w-12 bg-brutalist-black group relative" style="height: 95%"></div>
+<div class="w-12 bg-brutalist-black group relative" style="height: 60%"></div>
+<div class="w-12 bg-brutalist-black group relative" style="height: 30%"></div>
+</div>
+<div class="flex justify-between px-4 pt-4 chart-label opacity-60">
+<span>0-20</span><span>21-40</span><span>41-60</span><span>61-80</span><span>81-90</span><span>91-100</span>
+</div>
+</div>
+<div class="col-span-5 brutalist-card p-8">
+<h3 class="chart-label text-lg mb-8">Avg Category Scores</h3>
+<div class="h-[300px] flex items-center justify-center relative">
+<svg class="w-full h-full" viewBox="0 0 200 200">
+<polygon fill="none" points="100,20 180,150 20,150" stroke="#ddd" stroke-width="1"></polygon>
+<polygon fill="none" points="100,50 150,130 50,130" stroke="#ddd" stroke-width="1"></polygon>
+<polygon fill="#141414" fill-opacity="0.8" points="100,40 160,140 45,120"></polygon>
+<text class="chart-label" style="font-size: 8px;" text-anchor="middle" x="100" y="15">SKILLS</text>
+<text class="chart-label" style="font-size: 8px;" text-anchor="middle" x="190" y="160">PROJECTS</text>
+<text class="chart-label" style="font-size: 8px;" text-anchor="middle" x="10" y="160">EXPERIENCE</text>
+</svg>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-8">
+<div class="brutalist-card p-8">
+<h3 class="chart-label mb-6">Most Common Skills</h3>
+<div class="space-y-4">
+<div class="space-y-1">
+<div class="flex justify-between chart-label text-[10px]"><span>React</span><span>88%</span></div>
+<div class="h-4 bg-slate-200 w-full rounded-sm overflow-hidden">
+<div class="h-full bg-brutalist-black w-[88%]"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between chart-label text-[10px]"><span>Python</span><span>74%</span></div>
+<div class="h-4 bg-slate-200 w-full rounded-sm overflow-hidden">
+<div class="h-full bg-brutalist-black w-[74%]"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between chart-label text-[10px]"><span>TypeScript</span><span>62%</span></div>
+<div class="h-4 bg-slate-200 w-full rounded-sm overflow-hidden">
+<div class="h-full bg-brutalist-black w-[62%]"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="brutalist-card p-8 flex flex-col items-center">
+<h3 class="chart-label mb-6 w-full text-left">Top Institutions</h3>
+<div class="relative w-40 h-40">
+<svg class="w-full h-full -rotate-90" viewBox="0 0 40 40">
+<circle cx="20" cy="20" fill="transparent" r="15.915" stroke="#ddd" stroke-width="4"></circle>
+<circle cx="20" cy="20" fill="transparent" r="15.915" stroke="#141414" stroke-dasharray="70 30" stroke-width="4"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="text-xl font-black">25</span>
+<span class="chart-label text-[8px]">candidates</span>
+</div>
+</div>
+<p class="chart-label mt-4 opacity-50">FROM TOP 1% COLLEGES</p>
+</div>
+<div class="brutalist-card p-8">
+<h3 class="chart-label mb-6">Years of Experience</h3>
+<div class="h-32 w-full relative">
+<svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 40">
+<defs>
+<linearGradient id="areaGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#141414" stop-opacity="0.8"></stop>
+<stop offset="100%" stop-color="#141414" stop-opacity="0.1"></stop>
+</linearGradient>
+</defs>
+<path d="M0 40 L0 35 Q 20 5, 40 25 T 100 10 L 100 40 Z" fill="url(#areaGradient)"></path>
+<path d="M0 35 Q 20 5, 40 25 T 100 10" fill="none" stroke="#141414" stroke-width="1"></path>
+</svg>
+<div class="flex justify-between chart-label opacity-40 mt-2">
+<span>0Y</span><span>5Y</span><span>10Y</span><span>15Y+</span>
+</div>
+</div>
+</div>
+</div>
+<div class="brutalist-card p-8 overflow-hidden">
+<h3 class="chart-label text-lg mb-10">All Candidates Ranked by Score</h3>
+<div class="h-[400px] w-full relative flex items-end gap-1 px-4">
+<div class="absolute inset-x-0 top-0 h-full flex flex-col justify-between py-10 opacity-10 pointer-events-none">
+<div class="border-t border-brutalist-black w-full"></div>
+<div class="border-t border-brutalist-black w-full"></div>
+<div class="border-t border-brutalist-black w-full"></div>
+<div class="border-t border-brutalist-black w-full"></div>
+</div>
+<div class="absolute bottom-[70%] left-0 w-full dashed-line z-10">
+<span class="bg-[#F4F4F4] px-2 chart-label text-accent-red absolute -top-3 left-10">THRESHOLD: 70</span>
+</div>
+<div class="flex-1 bg-brutalist-black h-[98%] rounded-t-sm group relative">
+<div class="hidden group-hover:block tooltip -top-12 -left-4 whitespace-nowrap chart-label">ID #102: 98.0</div>
+</div>
+<div class="flex-1 bg-brutalist-black h-[96%] rounded-t-sm"></div>
+<div class="flex-1 bg-brutalist-black h-[92%] rounded-t-sm"></div>
+<div class="flex-1 bg-brutalist-black h-[89%] rounded-t-sm"></div>
+<div class="flex-1 bg-brutalist-black h-[85%] rounded-t-sm"></div>
+<div class="flex-1 bg-brutalist-black h-[82%] rounded-t-sm"></div>
+<div class="flex-1 bg-brutalist-black h-[79%] rounded-t-sm"></div>
+<div class="flex-1 bg-brutalist-black h-[76%] rounded-t-sm"></div>
+<div class="flex-1 bg-brutalist-black h-[74%] rounded-t-sm"></div>
+<div class="flex-1 bg-brutalist-black h-[72%] rounded-t-sm"></div>
+<div class="flex-1 bg-brutalist-black h-[70%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[68%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[65%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[63%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[60%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[58%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[55%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[52%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[50%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[48%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[45%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[42%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[40%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[38%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[35%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[32%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[30%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[28%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[25%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[22%] rounded-t-sm"></div>
+<div class="flex-1 bg-slate-400 h-[20%] rounded-t-sm"></div>
+</div>
+</div>
+<div class="flex gap-6 pb-12">
+<button class="flex-1 h-[90px] brutalist-card rounded-xl font-black uppercase text-xl hover:bg-slate-50 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-3">
+<span class="material-symbols-outlined text-3xl">table_view</span>
+            Download CSV
+        </button>
+<button class="flex-1 h-[90px] brutalist-card rounded-xl font-black uppercase text-xl hover:bg-slate-50 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-3">
+<span class="material-symbols-outlined text-3xl">picture_as_pdf</span>
+            Export PDF Report
+        </button>
+</div>
+</main>
+<footer class="max-w-[1440px] mx-auto p-8 border-t-2 border-brutalist-black/10 flex justify-between items-center chart-label opacity-40">
+<p>© 2024 RESUMERANKER V3.0 // ANALYTICS ENGINE</p>
+<div class="flex gap-6">
+<a class="hover:underline" href="#">Documentation</a>
+<a class="hover:underline" href="#">API Reference</a>
+<a class="hover:underline" href="#">Privacy Policy</a>
+</div>
+</footer>
+
+</body></html>
