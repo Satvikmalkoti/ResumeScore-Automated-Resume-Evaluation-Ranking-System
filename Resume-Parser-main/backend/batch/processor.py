@@ -7,6 +7,7 @@ import spacy
 import pdfplumber
 import docx2txt
 import io
+import re
 
 from scoring.scorer import ResumeScorer
 from extraction.project_extractor import ProjectExtractor
@@ -35,7 +36,8 @@ class BatchResumeProcessor:
         self.online_extractor = OnlinePresenceExtractor()
         self.ec_extractor = ExtraCurricularExtractor()
         self.degree_classifier = DegreeClassifier()
-        self.college_ranker = CollegeRanker('./data/nirf_rankings.csv')
+        # Initialize with the directory containing all NIRF CSVs
+        self.college_ranker = CollegeRanker('./data/nirf_data')
         
         self.executor = ThreadPoolExecutor(max_workers=10)
     
@@ -118,7 +120,7 @@ class BatchResumeProcessor:
                 'online_presence': self.online_extractor.extract(text),
                 'extra_curricular': self.ec_extractor.extract(text),
                 'degree_type': self.degree_classifier.get_highest_degree(text),
-                'college_tier': self.college_ranker.get_tier(''.join(education)),
+                'college_tier': self.college_ranker.get_tier(' '.join(education) if education else text),
                 'experience_years': exp_years,
                 'internships': internships
             }
