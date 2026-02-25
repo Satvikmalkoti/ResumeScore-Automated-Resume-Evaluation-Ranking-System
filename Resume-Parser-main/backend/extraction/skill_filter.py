@@ -15,7 +15,7 @@ class SkillFilter:
             'jawaharlal nehru university',
             'banaras hindu university',
             'jadavpur', 'amrita', 'vit', 'srm', 'thapar',
-            'manipal', 'kiit', 'lpu', 'chandigarh university'
+            'manipal', 'kiit', 'lpu', 'chandigarh university','AKTU','dr apj abdul kalam technical university'
         ]
         
         # Words that indicate it's actually a skill

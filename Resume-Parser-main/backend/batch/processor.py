@@ -19,6 +19,8 @@ from extraction.extra_curricular import ExtraCurricularExtractor
 from extraction.degree_classifier import DegreeClassifier
 from extraction.college_ranker import CollegeRanker
 from extraction.skill_filter import SkillFilter
+from matcher.jd_parser import JDParser
+from matcher.tfidf_matcher import TFIDFJobMatcher
 
 class BatchResumeProcessor:
     def __init__(self, model_path="./model"):
@@ -40,6 +42,8 @@ class BatchResumeProcessor:
         # Initialize with the directory containing all NIRF CSVs
         self.college_ranker = CollegeRanker('./data')
         self.skill_filter = SkillFilter()
+        self.jd_parser = JDParser()
+        self.job_matcher = TFIDFJobMatcher()
         
         self.executor = ThreadPoolExecutor(max_workers=10)
     
@@ -136,6 +140,7 @@ class BatchResumeProcessor:
             
             return {
                 'filename': filename,
+                'full_text': text,
                 'score': score,
                 **extracted
             }
@@ -171,30 +176,51 @@ class BatchResumeProcessor:
         return sorted_cands
 
     async def match_with_jd(self, files, job_description):
-        """Match resumes against job description"""
-        # Extract skills from JD if nlp is available
-        jd_skills = []
-        if self.nlp:
-            jd_doc = self.nlp(job_description)
-            jd_skills = [ent.text for ent in jd_doc.ents if ent.label_ == 'Skill']
+        """Match resumes against job description using TF-IDF and skill matching"""
+        # Parse job description
+        jd_data = self.jd_parser.parse_job_description(job_description)
+        jd_skills = set(jd_data['required_skills'])
+        jd_exp = jd_data['years_experience']
         
-        # Process resumes
+        # Process resumes to get basic features
         results = await self.process_batch(files)
         
-        # Add match scores
+        # Add matches using comprehensive_match
         for res in results['results']:
+            # Re-extracting full text or using stored text if available
+            # Since process_batch doesn't return full text currently, let's assume we need it
+            # We might want to modify _process_single_sync to include full_text if needed
+            # But for now, we'll recreate the match based on extracted data
+            
+            # Note: For better accuracy, we should really pass the full text here.
+            # I'll update match_with_jd to store full text during processing or use a workaround.
+            
+            # Using extracted skills and experience
             resume_skills = set([s.lower() for s in res.get('skills', [])])
-            jd_skills_set = set([s.lower() for s in jd_skills])
-            matches = resume_skills & jd_skills_set
+            resume_exp = res.get('experience_years', 0)
+            
+            # For TF-IDF, we need 'text'. Since it's not in 'res', let's fix that in _process_single_sync.
+            resume_text = res.get('full_text', "") 
+            
+            match_res = self.job_matcher.comprehensive_match(
+                resume_text=resume_text,
+                jd_text=job_description,
+                resume_skills=resume_skills,
+                jd_skills=jd_skills,
+                resume_exp=resume_exp,
+                jd_exp=jd_exp
+            )
             
             res['job_match'] = {
-                'score': round(len(matches) / max(len(jd_skills_set), 1) * 100, 2) if jd_skills_set else 0,
-                'matching_skills': list(matches),
-                'missing_skills': list(jd_skills_set - resume_skills)
+                'score': match_res['total_score'],
+                'tfidf_similarity': match_res['tfidf_similarity'],
+                'matching_skills': match_res['skill_match']['matched'],
+                'missing_skills': match_res['skill_match']['missing'],
+                'experience_match': match_res['experience_match'],
+                'top_terms': match_res['top_terms']
             }
         
-        # Re-rank by match score if desired, or keep original ranking
-        # Let's re-rank by job match score
+        # Re-rank by match score
         results['results'] = sorted(
             results['results'],
             key=lambda x: x['job_match']['score'],

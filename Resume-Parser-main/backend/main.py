@@ -8,6 +8,8 @@ from fastapi.responses import JSONResponse, Response
 import pandas as pd
 
 from batch.processor import BatchResumeProcessor
+from matcher.jd_parser import JDParser
+from matcher.tfidf_matcher import TFIDFJobMatcher
 
 # Initialize FastAPI
 app = FastAPI(title="Resume Parser API", version="2.0.0")
@@ -88,7 +90,13 @@ async def match_with_job(
             file_data.append((file.filename, content))
             
         results = await processor.match_with_jd(file_data, job_description)
-        return results
+        
+        # Add metadata for the UI if needed
+        return {
+            "status": "success",
+            "job_description_parsed": True,
+            **results
+        }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
