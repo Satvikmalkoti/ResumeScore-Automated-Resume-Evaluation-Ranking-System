@@ -32,7 +32,7 @@ class TFIDFJobMatcher:
             'education': 0.10           # 10%
         }
         
-        print("✅ TF-IDF Matcher initialized")
+        print("[SUCCESS] TF-IDF Matcher initialized")
     
     def calculate_similarity(self, resume_text: str, jd_text: str) -> float:
         """

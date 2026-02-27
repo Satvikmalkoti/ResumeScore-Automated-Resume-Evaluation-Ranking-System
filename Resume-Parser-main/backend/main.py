@@ -76,7 +76,8 @@ async def batch_parse(files: List[UploadFile] = File(...)):
 @app.post("/match-job")
 async def match_with_job(
     files: List[UploadFile] = File(...),
-    job_description: str = Form(...)
+    job_description: str = Form(...),
+    include_ai_insights: bool = Form(True)
 ):
     """Match resumes against job description"""
     if not job_description:
@@ -89,7 +90,7 @@ async def match_with_job(
             content = await file.read()
             file_data.append((file.filename, content))
             
-        results = await processor.match_with_jd(file_data, job_description)
+        results = await processor.match_with_jd(file_data, job_description, include_ai_insights=include_ai_insights)
         
         # Add metadata for the UI if needed
         return {

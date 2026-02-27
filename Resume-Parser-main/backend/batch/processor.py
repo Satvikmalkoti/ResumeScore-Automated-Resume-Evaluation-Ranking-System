@@ -1,4 +1,5 @@
 import asyncio
+import os
 from concurrent.futures import ThreadPoolExecutor
 import time
 from pathlib import Path
@@ -21,6 +22,8 @@ from extraction.college_ranker import CollegeRanker
 from extraction.skill_filter import SkillFilter
 from matcher.jd_parser import JDParser
 from matcher.tfidf_matcher import TFIDFJobMatcher
+from matcher.semantic_matcher import SemanticJobMatcher
+from ai_engine import AIInsightsEngine
 
 class BatchResumeProcessor:
     def __init__(self, model_path="./model"):
@@ -44,6 +47,8 @@ class BatchResumeProcessor:
         self.skill_filter = SkillFilter()
         self.jd_parser = JDParser()
         self.job_matcher = TFIDFJobMatcher()
+        self.semantic_matcher = SemanticJobMatcher()
+        self.ai_insights = AIInsightsEngine(api_key=os.getenv('GEMINI_API_KEY'))
         
         self.executor = ThreadPoolExecutor(max_workers=10)
     
@@ -175,52 +180,60 @@ class BatchResumeProcessor:
         
         return sorted_cands
 
-    async def match_with_jd(self, files, job_description):
-        """Match resumes against job description using TF-IDF and skill matching"""
+    async def match_with_jd(self, files, job_description, include_ai_insights=True):
+        """Match resumes against job description using Hybrid (TF-IDF + Semantic) matching"""
         # Parse job description
         jd_data = self.jd_parser.parse_job_description(job_description)
-        jd_skills = set(jd_data['required_skills'])
+        jd_skills = jd_data['required_skills']
         jd_exp = jd_data['years_experience']
         
         # Process resumes to get basic features
         results = await self.process_batch(files)
         
-        # Add matches using comprehensive_match
+        # Add matches using Hybrid and Semantic Matchers
         for res in results['results']:
-            # Re-extracting full text or using stored text if available
-            # Since process_batch doesn't return full text currently, let's assume we need it
-            # We might want to modify _process_single_sync to include full_text if needed
-            # But for now, we'll recreate the match based on extracted data
-            
-            # Note: For better accuracy, we should really pass the full text here.
-            # I'll update match_with_jd to store full text during processing or use a workaround.
-            
-            # Using extracted skills and experience
-            resume_skills = set([s.lower() for s in res.get('skills', [])])
+            resume_skills = res.get('skills', [])
             resume_exp = res.get('experience_years', 0)
-            
-            # For TF-IDF, we need 'text'. Since it's not in 'res', let's fix that in _process_single_sync.
             resume_text = res.get('full_text', "") 
             
-            match_res = self.job_matcher.comprehensive_match(
+            # 1. TF-IDF match (Legacy/Baseline)
+            tfidf_match = self.job_matcher.calculate_similarity(resume_text, job_description)
+            
+            # 2. Semantic Hybrid match
+            semantic_res = self.semantic_matcher.hybrid_match(
                 resume_text=resume_text,
                 jd_text=job_description,
                 resume_skills=resume_skills,
                 jd_skills=jd_skills,
+                tfidf_score=tfidf_match
+            )
+            
+            # 3. Comprehensive match (Existing logic but enhanced)
+            match_res = self.job_matcher.comprehensive_match(
+                resume_text=resume_text,
+                jd_text=job_description,
+                resume_skills=set([s.lower() for s in resume_skills]),
+                jd_skills=set([s.lower() for s in jd_skills]),
                 resume_exp=resume_exp,
                 jd_exp=jd_exp
             )
             
             res['job_match'] = {
-                'score': match_res['total_score'],
-                'tfidf_similarity': match_res['tfidf_similarity'],
-                'matching_skills': match_res['skill_match']['matched'],
-                'missing_skills': match_res['skill_match']['missing'],
+                'score': semantic_res['hybrid_score'], # Upgrade to Hybrid Score as primary
+                'tfidf_similarity': round(tfidf_match * 100, 2),
+                'semantic_similarity': semantic_res['semantic_similarity'],
+                'matching_skills': semantic_res['skill_match']['matched_skills'],
+                'skill_analysis': semantic_res['skill_match'],
                 'experience_match': match_res['experience_match'],
                 'top_terms': match_res['top_terms']
             }
+
+            # 4. AI Insights (SWOT & Interview Questions)
+            if include_ai_insights and self.ai_insights.available:
+                insights = self.ai_insights.analyze_candidate(resume_text, job_description)
+                res['ai_insights'] = insights
         
-        # Re-rank by match score
+        # Re-rank by hybrid match score
         results['results'] = sorted(
             results['results'],
             key=lambda x: x['job_match']['score'],

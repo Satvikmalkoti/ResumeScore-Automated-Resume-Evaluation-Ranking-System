@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
+import AnalysisDashboard from "@/components/analysis-dashboard"
 
 export default function CandidatePage() {
     const { id } = useParams()
@@ -100,6 +101,22 @@ export default function CandidatePage() {
 
                     {/* Right Column: Detailed Info */}
                     <div className="lg:col-span-8 space-y-12">
+                        {/* AI Analysis Dashboard (Premium Feature) */}
+                        {cand.job_match && cand.ai_insights && (
+                            <section>
+                                <AnalysisDashboard
+                                    swot={cand.ai_insights.swot_analysis}
+                                    questions={cand.ai_insights.interview_questions}
+                                    matchScores={{
+                                        tfidf: cand.job_match.tfidf_similarity,
+                                        semantic: cand.job_match.semantic_similarity,
+                                        hybrid: cand.job_match.score
+                                    }}
+                                    skillMatch={cand.job_match.skill_analysis}
+                                />
+                            </section>
+                        )}
+
                         {/* Skills Section */}
                         <section className="brutalist-card bg-white p-10 border-4">
                             <h3 className="text-2xl font-black uppercase tracking-tight mb-10 inline-block border-b-4 border-primary pb-2">Skills & Proficiencies</h3>

@@ -34,7 +34,7 @@ class CollegeRanker:
         # Cache for faster lookups
         self.tier_cache = {}
         
-        print(f"✅ Loaded {len(self.rankings)} college rankings from {len(self.category_files)} categories")
+        print(f"[SUCCESS] Loaded {len(self.rankings)} college rankings from {len(self.category_files)} categories")
     
     def _load_all_rankings(self, rankings_dir):
         """
@@ -95,12 +95,12 @@ class CollegeRanker:
                     except (ValueError, TypeError, AttributeError):
                         continue
                         
-                print(f"  ✓ Loaded {len(df)} colleges from {category} rankings")
+                print(f"  [+] Loaded {len(df)} colleges from {category} rankings")
             else:
-                print(f"  ✗ Could not identify columns in {os.path.basename(csv_path)}")
+                print(f"  [-] Could not identify columns in {os.path.basename(csv_path)}")
                 
         except Exception as e:
-            print(f"  ✗ Error loading {csv_path}: {e}")
+            print(f"  [-] Error loading {csv_path}: {e}")
     
     def _find_college_column(self, df):
         """
@@ -157,7 +157,7 @@ class CollegeRanker:
         """
         Fallback: Hardcoded rankings if no CSV files found
         """
-        print("⚠️ Using default hardcoded rankings (no CSV files found)")
+        print("[WARNING] Using default hardcoded rankings (no CSV files found)")
         
         # Tier 1 Colleges (Rank ≤ 50)
         tier1_colleges = [
