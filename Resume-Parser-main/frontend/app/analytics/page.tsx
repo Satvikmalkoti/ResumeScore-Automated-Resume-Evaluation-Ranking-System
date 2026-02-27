@@ -58,11 +58,41 @@ export default function AnalyticsPage() {
         { range: '91-100', count: data.results.filter((r: any) => r.score.total > 90).length },
     ]
 
+    // Score radar: Skills, Experience, Projects
+    const avgSkills = data.results.reduce((acc: number, r: any) => acc + (r.score.breakdown.skills || 0), 0) / data.results.length
+    const avgExp = data.results.reduce((acc: number, r: any) => acc + (r.score.breakdown.experience || 0), 0) / data.results.length
+    const avgProj = data.results.reduce((acc: number, r: any) => acc + (r.score.breakdown.projects || 0), 0) / data.results.length
+
+    // Normalize to 100 for radar
     const radarData = [
-        { subject: 'Skills', A: 85, fullMark: 100 },
-        { subject: 'Experience', A: 65, fullMark: 100 },
-        { subject: 'Projects', A: 90, fullMark: 100 },
+        { subject: 'Skills', A: (avgSkills / 20) * 100, fullMark: 100 },
+        { subject: 'Experience', A: (avgExp / 5) * 100, fullMark: 100 },
+        { subject: 'Projects', A: (avgProj / 15) * 100, fullMark: 100 },
     ]
+
+    // Institution tiers
+    const tiers = { T1: 0, T2: 0, T3: 0 }
+    data.results.forEach((r: any) => {
+        if (r.college_tier === 1) tiers.T1++
+        else if (r.college_tier === 2) tiers.T2++
+        else tiers.T3++
+    })
+    const pieData = [
+        { name: 'Tier 1', value: tiers.T1 },
+        { name: 'Tier 2', value: tiers.T2 },
+        { name: 'Tier 3/Other', value: tiers.T3 }
+    ]
+
+    // Experience ranges
+    const expRanges = { '0-2Y': 0, '2-5Y': 0, '5-10Y': 0, '10Y+': 0 }
+    data.results.forEach((r: any) => {
+        const y = r.experience_years || 0
+        if (y < 2) expRanges['0-2Y']++
+        else if (y < 5) expRanges['2-5Y']++
+        else if (y < 10) expRanges['5-10Y']++
+        else expRanges['10Y+']++
+    })
+    const areaData = Object.entries(expRanges).map(([x, y]) => ({ x, y }))
 
     const skillsMap: Record<string, number> = {}
     data.results.forEach((r: any) => {
@@ -169,11 +199,7 @@ export default function AnalyticsPage() {
                             </div>
                             <ResponsiveContainer width="100%" height="100%">
                                 <PieChart>
-                                    <Pie data={[
-                                        { name: 'Tier 1', value: 40 },
-                                        { name: 'Tier 2', value: 30 },
-                                        { name: 'Other', value: 30 }
-                                    ]} innerRadius={80} outerRadius={110} paddingAngle={5} dataKey="value">
+                                    <Pie data={pieData} innerRadius={80} outerRadius={110} paddingAngle={5} dataKey="value">
                                         <Cell fill="#141414" />
                                         <Cell fill="#cbd5e1" />
                                         <Cell fill="#e2e8f0" />
@@ -189,12 +215,7 @@ export default function AnalyticsPage() {
                         <h3 className="text-[10px] font-black uppercase tracking-widest mb-10 opacity-60">Years of Experience</h3>
                         <div className="flex-1">
                             <ResponsiveContainer width="100%" height="100%">
-                                <AreaChart data={[
-                                    { x: '0Y', y: 10 },
-                                    { x: '5Y', y: 30 },
-                                    { x: '10Y', y: 20 },
-                                    { x: '15Y+', y: 50 },
-                                ]}>
+                                <AreaChart data={areaData}>
                                     <defs>
                                         <linearGradient id="colorY" x1="0" y1="0" x2="0" y2="1">
                                             <stop offset="5%" stopColor="#141414" stopOpacity={0.8} />

@@ -90,7 +90,7 @@ class BatchResumeProcessor:
             }
         }
     
-    def _process_single_sync(self, filename, content):
+    async def _process_single(self, filename, content):
         try:
             # Extract text
             if filename.lower().endswith('.pdf'):
@@ -104,11 +104,20 @@ class BatchResumeProcessor:
             doc = self.nlp(text) if self.nlp else None
             
             # Extract basic entities from spaCy
-            skills = [ent.text for ent in doc.ents if ent.label_ == 'Skill'] if doc else []
+            spacy_skills = [ent.text for ent in doc.ents if ent.label_ == 'Skill'] if doc else []
             education = [ent.text for ent in doc.ents if ent.label_ == 'Education'] if doc else []
             
-            # Filter skills to remove college names
-            skills = self.skill_filter.filter_skills(skills, education)
+            # AI Skill Enrichment (Crucial Fix for "0 AI Skills")
+            ai_skills = []
+            if self.ai_insights.available:
+                # If spacy finds very few skills, or even if it finds some, let's enrich
+                ai_skills = await self.ai_insights.extract_skills(text)
+            
+            # Combine and remove duplicates
+            combined_skills = list(set(spacy_skills + ai_skills))
+            
+            # Filter skills to remove college names and academic noise
+            skills = self.skill_filter.filter_skills(combined_skills, education)
             
             experience_text = [ent.text for ent in doc.ents if ent.label_ == 'Work_Experience'] if doc else []
             languages = [ent.text for ent in doc.ents if ent.label_ == 'Language'] if doc else []
@@ -156,6 +165,10 @@ class BatchResumeProcessor:
         except Exception as e:
             print(f"Error processing {filename}: {e}")
             return None
+    
+    # Keeping sync version for internal calls if necessary, but shifting to async
+    def _process_single_sync(self, filename, content):
+        return asyncio.run(self._process_single(filename, content))
     
     def _extract_pdf(self, content):
         with io.BytesIO(content) as f:
@@ -234,7 +247,7 @@ class BatchResumeProcessor:
 
             # 4. AI Insights (SWOT & Interview Questions)
             if include_ai_insights:
-                res['ai_insights'] = self.ai_insights.analyze_candidate(resume_text, job_description)
+                res['ai_insights'] = self.ai_insights.analyze_candidate(resume_text, job_description, skills=resume_skills)
         
         # Re-rank by hybrid match score
         results['results'] = sorted(

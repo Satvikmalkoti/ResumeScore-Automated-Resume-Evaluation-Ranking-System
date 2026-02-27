@@ -37,7 +37,7 @@ class AIInsightsEngine:
         # Configure Gemini (keep app running even if config/model init fails)
         try:
             genai.configure(api_key=self.api_key)
-            self.model = genai.GenerativeModel('gemini-2.0-flash-exp')
+            self.model = genai.GenerativeModel('gemini-2.0-flash')
             self.available = True
             print("[SUCCESS] Gemini AI Insights Engine ready")
         except Exception as e:
@@ -45,12 +45,12 @@ class AIInsightsEngine:
             self.available = False
             self.model = None
     
-    def generate_swot(self, resume_text: str, jd_text: str) -> Dict:
+    def generate_swot(self, resume_text: str, jd_text: str, skills: List[str] = None) -> Dict:
         """
         Generate SWOT analysis for candidate vs job
         """
         if not self.available:
-            return self._mock_swot()
+            return self._mock_swot(skills)
         
         prompt = f"""
         You are an expert HR analyst. Analyze this candidate's resume against the job description.
@@ -91,17 +91,18 @@ class AIInsightsEngine:
             return json.loads(text.strip())
         except Exception as e:
             print(f"Error generating SWOT: {e}")
-            return self._mock_swot()
+            return self._mock_swot(skills)
     
     def generate_interview_questions(self, 
                                    resume_text: str, 
                                    jd_text: str,
-                                   num_questions: int = 5) -> List[Dict]:
+                                   num_questions: int = 5,
+                                   skills: List[str] = None) -> List[Dict]:
         """
         Generate tailored interview questions
         """
         if not self.available:
-            return self._mock_questions()
+            return self._mock_questions(skills)
         
         prompt = f"""
         You are a technical interviewer. Generate {num_questions} interview questions for this candidate.
@@ -142,58 +143,97 @@ class AIInsightsEngine:
             return json.loads(text.strip())
         except Exception as e:
             print(f"Error generating questions: {e}")
-            return self._mock_questions()
+            return self._mock_questions(skills)
     
-    def _mock_swot(self) -> Dict:
+    async def extract_skills(self, text: str) -> List[str]:
+        """
+        Extract professional skills from text using Gemini
+        """
+        if not self.available:
+            return []
+
+        prompt = f"""
+        Extract a comprehensive list of professional skills, technical tools, and soft skills from the following text.
+        Text:
+        {text[:2000]}
+
+        Return only a JSON array of skill names.
+        Example: ["Python", "Machine Learning", "FastAPI", "Project Management"]
+        """
+
+        try:
+            # Use a slightly larger limit for skill extraction but keep it efficient
+            response = await self.model.generate_content_async(prompt)
+            output = response.text
+            if '```json' in output:
+                output = output.split('```json')[1].split('```')[0]
+            elif '```' in output:
+                output = output.split('```')[1].split('```')[0]
+            
+            skills = json.loads(output.strip())
+            return [str(s).strip() for s in skills if s]
+        except Exception as e:
+            print(f"Error extracting skills via Gemini: {e}")
+            return []
+
+    def _mock_swot(self, skills: List[str] = None) -> Dict:
         """Fallback SWOT when AI unavailable"""
+        top_skills = skills[:3] if skills else ["Python", "Web Development", "General Software Engineering"]
+        skill_str = ", ".join(top_skills)
+        
         return {
             "strengths": [
-                "Strong Python skills matching job requirements",
-                "Previous experience with web frameworks",
-                "Good academic background"
+                f"Demonstrated proficiency in {skill_str}",
+                "Relevant project experience shown in resume",
+                "Strong academic background and credentials"
             ],
             "weaknesses": [
-                "Limited cloud/AWS experience mentioned",
-                "No senior-level project leadership shown"
+                "Limited cloud/deployment experience mentioned",
+                "Candidate could provide more specific quantifiable results",
+                "Some specialized industry tools not explicitly listed"
             ],
             "opportunities": [
-                "Could grow into technical lead role",
-                "Opportunity to learn modern stack"
+                "Excellent potential for rapid upskilling in project's tech stack",
+                "Could transition into a specialized role within 6-12 months",
+                "Opportunity to learn modern CI/CD and DevOps workflows"
             ],
             "threats": [
-                "May need ramp-up time with specific tech stack"
+                "Competitive candidate pool for this specific role",
+                "Potential ramp-up time for project-specific business logic"
             ]
         }
     
-    def _mock_questions(self) -> List[Dict]:
+    def _mock_questions(self, skills: List[str] = None) -> List[Dict]:
         """Fallback questions when AI unavailable"""
+        q_skills = skills[:3] if skills else ["Software Development", "Problem Solving", "Collaboration"]
+        
         return [
             {
-                "question": "Describe a challenging Python project you worked on. How did you overcome obstacles?",
+                "question": f"Based on your background in {q_skills[0] if len(q_skills) > 0 else 'Software'}, can you describe a challenging project obstacle you overcame?",
                 "type": "behavioral",
-                "skill_tested": "Python",
+                "skill_tested": q_skills[0] if len(q_skills) > 0 else "Execution",
                 "difficulty": "medium"
             },
             {
-                "question": "How would you design a REST API for a high-traffic application?",
+                "question": f"How have you applied {q_skills[1] if len(q_skills) > 1 else 'Modern Tools'} to optimize a workflow or improve code quality?",
                 "type": "technical",
-                "skill_tested": "API Design",
-                "difficulty": "hard"
+                "skill_tested": q_skills[1] if len(q_skills) > 1 else "Optimisation",
+                "difficulty": "medium"
             },
             {
-                "question": "Explain your experience with databases and query optimization.",
-                "type": "technical",
-                "skill_tested": "Databases",
+                "question": f"Explain a complex scenario where you used {q_skills[2] if len(q_skills) > 2 else 'Teamwork'} to achieve a common goal.",
+                "type": "behavioral",
+                "skill_tested": q_skills[2] if len(q_skills) > 2 else "Leadership",
                 "difficulty": "medium"
             }
         ]
     
-    def analyze_candidate(self, resume_text: str, jd_text: str) -> Dict:
+    def analyze_candidate(self, resume_text: str, jd_text: str, skills: List[str] = None) -> Dict:
         """
         Complete candidate analysis
         """
-        swot = self.generate_swot(resume_text, jd_text)
-        questions = self.generate_interview_questions(resume_text, jd_text)
+        swot = self.generate_swot(resume_text, jd_text, skills=skills)
+        questions = self.generate_interview_questions(resume_text, jd_text, skills=skills)
         
         return {
             'swot_analysis': swot,

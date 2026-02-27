@@ -59,7 +59,7 @@ async def parse_resume(file: UploadFile = File(...)):
     """Parse a single resume with detailed scoring"""
     try:
         content = await file.read()
-        result = processor._process_single_sync(file.filename, content)
+        result = await processor._process_single(file.filename, content)
         
         if not result:
             raise HTTPException(status_code=400, detail="Failed to parse resume")
