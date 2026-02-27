@@ -47,7 +47,11 @@ class BatchResumeProcessor:
         self.skill_filter = SkillFilter()
         self.jd_parser = JDParser()
         self.job_matcher = TFIDFJobMatcher()
-        self.semantic_matcher = SemanticJobMatcher()
+        try:
+            self.semantic_matcher = SemanticJobMatcher()
+        except Exception as e:
+            print(f"[WARNING] Semantic matcher unavailable - falling back to TF-IDF only: {e}")
+            self.semantic_matcher = None
         self.ai_insights = AIInsightsEngine(api_key=os.getenv('GEMINI_API_KEY'))
         
         self.executor = ThreadPoolExecutor(max_workers=10)
@@ -229,9 +233,8 @@ class BatchResumeProcessor:
             }
 
             # 4. AI Insights (SWOT & Interview Questions)
-            if include_ai_insights and self.ai_insights.available:
-                insights = self.ai_insights.analyze_candidate(resume_text, job_description)
-                res['ai_insights'] = insights
+            if include_ai_insights:
+                res['ai_insights'] = self.ai_insights.analyze_candidate(resume_text, job_description)
         
         # Re-rank by hybrid match score
         results['results'] = sorted(

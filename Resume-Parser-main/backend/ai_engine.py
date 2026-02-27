@@ -4,10 +4,14 @@ Generates SWOT analysis and interview questions
 FREE tier - perfect for hackathon
 """
 
-import google.generativeai as genai
 import os
 from typing import Dict, List
 import json
+
+try:
+    import google.generativeai as genai  # type: ignore
+except Exception:
+    genai = None
 
 class AIInsightsEngine:
     """
@@ -23,12 +27,23 @@ class AIInsightsEngine:
             print("[WARNING] No Gemini API key found - AI insights disabled")
             self.available = False
             return
+
+        if genai is None:
+            print("[WARNING] google-generativeai is not installed - AI insights disabled")
+            self.available = False
+            self.model = None
+            return
         
-        # Configure Gemini
-        genai.configure(api_key=self.api_key)
-        self.model = genai.GenerativeModel('gemini-2.0-flash-exp')
-        self.available = True
-        print("[SUCCESS] Gemini AI Insights Engine ready")
+        # Configure Gemini (keep app running even if config/model init fails)
+        try:
+            genai.configure(api_key=self.api_key)
+            self.model = genai.GenerativeModel('gemini-2.0-flash-exp')
+            self.available = True
+            print("[SUCCESS] Gemini AI Insights Engine ready")
+        except Exception as e:
+            print(f"[WARNING] Gemini init failed - AI insights disabled: {e}")
+            self.available = False
+            self.model = None
     
     def generate_swot(self, resume_text: str, jd_text: str) -> Dict:
         """

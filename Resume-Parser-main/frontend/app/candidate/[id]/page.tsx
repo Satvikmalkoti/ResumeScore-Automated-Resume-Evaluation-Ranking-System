@@ -4,10 +4,12 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import AnalysisDashboard from "@/components/analysis-dashboard"
+import AppNav from "@/components/app-nav"
 
 export default function CandidatePage() {
     const { id } = useParams()
     const [cand, setCand] = useState<any>(null)
+    const [checkedStorage, setCheckedStorage] = useState(false)
 
     useEffect(() => {
         const stored = sessionStorage.getItem("results")
@@ -15,11 +17,35 @@ export default function CandidatePage() {
             const data = JSON.parse(stored)
             setCand(data.results[Number(id)])
         }
+        setCheckedStorage(true)
     }, [id])
 
-    if (!cand) return (
+    if (!checkedStorage) return (
         <div className="flex items-center justify-center min-h-screen bg-background-light">
-            <div className="text-4xl font-black uppercase tracking-tighter">Profile Not Found</div>
+            <div className="text-4xl font-black uppercase tracking-tighter animate-pulse">Loading Profile...</div>
+        </div>
+    )
+
+    if (!cand) return (
+        <div className="bg-background-light min-h-screen text-brutal-black font-sans p-8">
+            <div className="max-w-7xl mx-auto">
+                <AppNav className="mb-16 px-4" />
+                <div className="brutalist-card bg-white p-10 border-4 text-center">
+                    <div className="text-4xl font-black uppercase tracking-tighter mb-4">Profile Not Found</div>
+                    <p className="max-w-xl mx-auto font-bold uppercase tracking-widest text-slate-400 mb-10">
+                        This candidate page needs a parsed pool in session storage. Open results from the upload flow.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <Link href="/results" className="brutalist-button text-sm py-4 px-10">
+                            Candidates
+                        </Link>
+                        <Link href="/upload" className="brutalist-button-primary text-sm py-4 px-10">
+                            Upload Pool
+                        </Link>
+                    </div>
+                </div>
+            </div>
+            <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
         </div>
     )
 
@@ -28,19 +54,28 @@ export default function CandidatePage() {
     return (
         <div className="bg-background-light min-h-screen text-brutal-black font-sans p-8">
             <div className="max-w-7xl mx-auto">
-                <header className="flex justify-between items-center mb-12 px-4">
-                    <div className="flex items-center gap-4 font-black uppercase text-xs tracking-[0.2em] text-slate-400">
-                        <Link href="/results" className="hover:text-brutal-black transition-colors">Candidates</Link>
-                        <span>&rsaquo;</span>
-                        <span className="text-brutal-black italic">{name}</span>
-                    </div>
-                    <div className="flex gap-4">
-                        <span className="material-symbols-outlined hover:bg-slate-100 p-2 rounded-full cursor-pointer transition-colors border-2 border-transparent hover:border-brutal-black">notifications</span>
-                        <div className="size-10 bg-slate-200 rounded-full border-2 border-brutal-black overflow-hidden shadow-hard-sm">
-                            <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`} alt="User" className="w-full h-full object-cover" />
+                <AppNav
+                    className="mb-8 px-4"
+                    rightSlot={
+                        <div className="hidden md:flex items-center gap-4 border-l-2 border-brutal-black pl-6">
+                            <span className="material-symbols-outlined hover:bg-slate-100 p-2 rounded-full cursor-pointer transition-colors border-2 border-transparent hover:border-brutal-black">
+                                notifications
+                            </span>
+                            <div className="size-10 bg-slate-200 rounded-full border-2 border-brutal-black overflow-hidden shadow-hard-sm">
+                                <img
+                                    src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`}
+                                    alt="User"
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
                         </div>
-                    </div>
-                </header>
+                    }
+                />
+                <div className="flex items-center gap-4 font-black uppercase text-xs tracking-[0.2em] text-slate-400 mb-12 px-4">
+                    <Link href="/results" className="hover:text-brutal-black transition-colors">Candidates</Link>
+                    <span>&rsaquo;</span>
+                    <span className="text-brutal-black italic">{name}</span>
+                </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 px-4">
                     {/* Left Column: Profile Card & Breakdown */}
@@ -107,6 +142,7 @@ export default function CandidatePage() {
                                 <AnalysisDashboard
                                     swot={cand.ai_insights.swot_analysis}
                                     questions={cand.ai_insights.interview_questions}
+                                    aiPowered={cand.ai_insights.ai_powered}
                                     matchScores={{
                                         tfidf: cand.job_match.tfidf_similarity,
                                         semantic: cand.job_match.semantic_similarity,

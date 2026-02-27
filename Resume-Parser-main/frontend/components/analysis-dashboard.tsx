@@ -23,9 +23,10 @@ interface Props {
         hybrid: number;
     };
     skillMatch: any;
+    aiPowered?: boolean;
 }
 
-export default function AnalysisDashboard({ swot, questions, matchScores, skillMatch }: Props) {
+export default function AnalysisDashboard({ swot, questions, matchScores, skillMatch, aiPowered }: Props) {
     return (
         <div className="space-y-12">
             {/* Premium Match Scores */}
@@ -59,10 +60,16 @@ export default function AnalysisDashboard({ swot, questions, matchScores, skillM
                     <span className="material-symbols-outlined text-[150px]">psychology</span>
                 </div>
 
-                <h3 className="text-2xl font-black uppercase tracking-tight mb-10 flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary">analytics</span>
-                    AI SWOT Analysis
-                </h3>
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-10">
+                    <h3 className="text-2xl font-black uppercase tracking-tight flex items-center gap-3">
+                        <span className="material-symbols-outlined text-primary">analytics</span>
+                        AI SWOT Analysis
+                    </h3>
+                    <div className={`inline-flex items-center gap-2 px-3 py-1 border-2 border-brutal-black text-[10px] font-black uppercase tracking-widest ${aiPowered ? 'bg-primary text-white' : 'bg-yellow-400 text-brutal-black'}`}>
+                        <span className="material-symbols-outlined text-sm">{aiPowered ? 'bolt' : 'warning'}</span>
+                        {aiPowered ? 'AI POWERED' : 'FALLBACK MODE'}
+                    </div>
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
                     <div className="space-y-4">

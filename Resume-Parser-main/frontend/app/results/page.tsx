@@ -2,54 +2,90 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import AppNav from "@/components/app-nav"
 
 export default function ResultsPage() {
-  const [data, setData] = useState<any>(null)
+  const [data, setData] = useState<any | null>(null)
+  const [checkedStorage, setCheckedStorage] = useState(false)
 
   useEffect(() => {
     const stored = sessionStorage.getItem("results")
     if (stored) setData(JSON.parse(stored))
+    setCheckedStorage(true)
   }, [])
 
-  if (!data) return (
+  if (!checkedStorage) return (
     <div className="flex items-center justify-center min-h-screen bg-background-light">
-      <div className="text-4xl font-black uppercase tracking-tighter animate-pulse">Analyzing Pool...</div>
+      <div className="text-4xl font-black uppercase tracking-tighter animate-pulse">Loading Results...</div>
+    </div>
+  )
+
+  if (!data) return (
+    <div className="bg-background-light min-h-screen text-brutal-black font-sans p-8">
+      <div className="max-w-7xl mx-auto">
+        <AppNav className="mb-16 px-4" />
+        <div className="brutalist-card bg-white p-10 border-4 text-center">
+          <div className="text-4xl font-black uppercase tracking-tighter mb-4">No Results Yet</div>
+          <p className="max-w-xl mx-auto font-bold uppercase tracking-widest text-slate-400 mb-10">
+            Upload a resume pool and a job description to generate ranked candidates.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/upload" className="brutalist-button-primary text-sm py-4 px-10">
+              Go To Upload
+            </Link>
+            <Link href="/analytics" className="brutalist-button text-sm py-4 px-10">
+              View Analytics
+            </Link>
+          </div>
+        </div>
+      </div>
+      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
     </div>
   )
 
   if (!data.stats) return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background-light p-8 text-center">
-      <div className="text-4xl font-black uppercase tracking-tighter mb-4 text-red-500 italic">No Stats Found</div>
-      <p className="max-w-md font-bold uppercase tracking-widest text-slate-400 mb-8">The analytical data for this pool is missing or corrupt.</p>
-      <Link href="/upload" className="px-8 py-4 bg-brutal-black text-white font-black uppercase tracking-widest shadow-hard hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">Retry Upload</Link>
+    <div className="bg-background-light min-h-screen text-brutal-black font-sans p-8">
+      <div className="max-w-7xl mx-auto">
+        <AppNav className="mb-16 px-4" />
+        <div className="brutalist-card bg-white p-10 border-4 text-center">
+          <div className="text-4xl font-black uppercase tracking-tighter mb-4 text-red-500 italic">No Stats Found</div>
+          <p className="max-w-xl mx-auto font-bold uppercase tracking-widest text-slate-400 mb-10">
+            The analytical data for this pool is missing or corrupt.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/upload" className="brutalist-button-primary text-sm py-4 px-10">
+              Retry Upload
+            </Link>
+            <Link href="/results" className="brutalist-button text-sm py-4 px-10">
+              Reload Results
+            </Link>
+          </div>
+        </div>
+      </div>
+      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
     </div>
   )
 
   return (
     <div className="bg-background-light min-h-screen text-brutal-black font-sans p-8">
       <div className="max-w-7xl mx-auto">
-        <header className="flex justify-between items-center mb-16 px-4">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="size-10 bg-brutal-black flex items-center justify-center rounded-xl text-white group-hover:rotate-12 transition-transform shadow-hard">
-              <span className="material-symbols-outlined text-2xl">auto_awesome</span>
-            </div>
-            <span className="text-xl font-black uppercase tracking-tighter">ResumeRanker</span>
-          </Link>
-          <div className="flex items-center gap-8">
-            <nav className="hidden md:flex gap-6 font-black uppercase text-xs tracking-widest">
-              <Link href="/" className="hover:text-primary transition-colors italic">Dashboard</Link>
-              <Link href="/results" className="text-primary underline underline-offset-4 decoration-4">Candidates</Link>
-              <Link href="#" className="hover:text-primary transition-colors">Jobs</Link>
-              <Link href="#" className="hover:text-primary transition-colors">Settings</Link>
-            </nav>
-            <div className="flex items-center gap-4 border-l-2 border-brutal-black pl-8">
-              <span className="material-symbols-outlined hover:bg-slate-100 p-2 rounded-full cursor-pointer transition-colors">notifications</span>
+        <AppNav
+          className="mb-16 px-4"
+          rightSlot={
+            <div className="hidden md:flex items-center gap-4 border-l-2 border-brutal-black pl-6">
+              <span className="material-symbols-outlined hover:bg-slate-100 p-2 rounded-full cursor-pointer transition-colors">
+                notifications
+              </span>
               <div className="size-10 bg-slate-200 rounded-full border-2 border-brutal-black overflow-hidden shadow-hard-sm">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="User" className="w-full h-full object-cover" />
+                <img
+                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
+                  alt="User"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
-          </div>
-        </header>
+          }
+        />
 
         <section className="px-4 mb-20">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-4">

@@ -11,6 +11,15 @@ from batch.processor import BatchResumeProcessor
 from matcher.jd_parser import JDParser
 from matcher.tfidf_matcher import TFIDFJobMatcher
 
+# Load environment variables from .env for local/dev.
+# On Render/Railway/Fly, env vars should be injected by the platform.
+try:
+    from dotenv import load_dotenv  # type: ignore
+
+    load_dotenv()
+except Exception:
+    pass
+
 # Initialize FastAPI
 app = FastAPI(title="Resume Parser API", version="2.0.0")
 

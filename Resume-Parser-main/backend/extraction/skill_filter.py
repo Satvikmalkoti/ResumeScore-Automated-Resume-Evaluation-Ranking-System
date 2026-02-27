@@ -1,3 +1,5 @@
+import re
+
 class SkillFilter:
     """
     Filters out colleges/universities from extracted skills
@@ -15,14 +17,46 @@ class SkillFilter:
             'jawaharlal nehru university',
             'banaras hindu university',
             'jadavpur', 'amrita', 'vit', 'srm', 'thapar',
-            'manipal', 'kiit', 'lpu', 'chandigarh university','AKTU','dr apj abdul kalam technical university'
+            'manipal', 'kiit', 'lpu', 'chandigarh university',
+            'aktu', 'dr apj abdul kalam technical university',
         ]
+        self.college_keywords = [k.lower() for k in self.college_keywords]
         
         # Words that indicate it's actually a skill
         self.skill_indicators = [
             'programming', 'language', 'framework', 'library',
             'developer', 'engineer', 'coding', 'software'
         ]
+        self.skill_indicators = [k.lower() for k in self.skill_indicators]
+
+        # Common "education artifacts" that spaCy may mislabel as skills
+        self.academic_noise_patterns = [
+            r'\bclass\s*(?:x|xii|10|12)\b',
+            r'\b(?:10th|12th)\b',
+            r'\b(?:ssc|hsc)\b',
+            r'\b(?:cbse|icse)\b',
+            r'\b(?:high\s*school|secondary\s*school|senior\s*secondary)\b',
+        ]
+    
+    def is_academic_noise(self, text: str) -> bool:
+        text_lower = text.lower().strip()
+        if not text_lower:
+            return True
+
+        # Avoid filtering if it clearly looks like an actual skill phrase
+        for skill_word in self.skill_indicators:
+            if skill_word in text_lower:
+                return False
+
+        for pat in self.academic_noise_patterns:
+            if re.search(pat, text_lower, flags=re.IGNORECASE):
+                return True
+
+        # Common false positives: pure grade tokens
+        if re.fullmatch(r'(?:x|xii|10|12)', text_lower):
+            return True
+
+        return False
     
     def is_actually_college(self, text):
         """
@@ -57,6 +91,9 @@ class SkillFilter:
         
         filtered_skills = []
         for skill in extracted_skills:
+            if self.is_academic_noise(skill):
+                continue
+
             skill_lower = skill.lower()
             
             # Skip if skill matches any college name

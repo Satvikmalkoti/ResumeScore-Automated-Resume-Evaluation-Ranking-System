@@ -3,10 +3,17 @@ TF-IDF Matcher - Compares resume vs job description using cosine similarity
 NO new AI models - uses sklearn TF-IDF
 """
 
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
+from __future__ import annotations
+
+import re
 from typing import Dict, List, Set, Union
+
+try:
+    from sklearn.feature_extraction.text import TfidfVectorizer  # type: ignore
+    from sklearn.metrics.pairwise import cosine_similarity  # type: ignore
+except Exception:
+    TfidfVectorizer = None
+    cosine_similarity = None
 
 class TFIDFJobMatcher:
     """
@@ -15,14 +22,21 @@ class TFIDFJobMatcher:
     """
     
     def __init__(self):
-        # TF-IDF vectorizer with smart parameters
-        self.vectorizer = TfidfVectorizer(
-            max_features=1000,           # Limit features
-            stop_words='english',         # Remove common words
-            ngram_range=(1, 2),           # Use unigrams and bigrams
-            min_df=1,                      # Minimum document frequency
-            max_df=0.8                     # Ignore too common terms
-        )
+        self.available = TfidfVectorizer is not None and cosine_similarity is not None
+
+        if self.available:
+            # TF-IDF vectorizer with smart parameters
+            self.vectorizer = TfidfVectorizer(
+                max_features=1000,           # Limit features
+                stop_words='english',         # Remove common words
+                ngram_range=(1, 2),           # Use unigrams and bigrams
+                min_df=1,                      # Minimum document frequency
+                max_df=0.8                     # Ignore too common terms
+            )
+            print("[SUCCESS] TF-IDF Matcher initialized")
+        else:
+            self.vectorizer = None
+            print("[WARNING] scikit-learn not available - TF-IDF disabled (skill-overlap fallback only)")
         
         # Scoring weights (based on research)
         self.weights = {
@@ -31,8 +45,21 @@ class TFIDFJobMatcher:
             'experience': 0.15,         # 15%
             'education': 0.10           # 10%
         }
-        
-        print("[SUCCESS] TF-IDF Matcher initialized")
+
+    def _tokenize(self, text: str) -> Set[str]:
+        text = (text or "").lower()
+        text = re.sub(r"[^a-z0-9\s]", " ", text)
+        tokens = [t for t in text.split() if len(t) > 2]
+        return set(tokens)
+
+    def _jaccard_similarity(self, a: str, b: str) -> float:
+        ta = self._tokenize(a)
+        tb = self._tokenize(b)
+        if not ta or not tb:
+            return 0.0
+        inter = len(ta & tb)
+        union = len(ta | tb)
+        return inter / union if union else 0.0
     
     def calculate_similarity(self, resume_text: str, jd_text: str) -> float:
         """
@@ -40,6 +67,10 @@ class TFIDFJobMatcher:
         Returns score between 0-1
         """
         try:
+            if not self.available:
+                # Lightweight fallback when sklearn isn't installed
+                return float(self._jaccard_similarity(resume_text, jd_text))
+
             # Create document pair
             documents = [resume_text, jd_text]
             
@@ -60,6 +91,9 @@ class TFIDFJobMatcher:
         Useful for debugging and explainability
         """
         try:
+            if not self.available:
+                return []
+
             # Transform single document
             tfidf_matrix = self.vectorizer.fit_transform([text])
             

@@ -19,7 +19,10 @@ const nextConfig = {
     }
 
     return [
-      { source: '/parse', destination: `${apiUrl}/parse` },
+      // Unified API proxy for deploy (frontend calls /api/*)
+      { source: "/api/:path*", destination: `${apiUrl}/:path*` },
+      // Back-compat for any direct /parse usage
+      { source: "/parse", destination: `${apiUrl}/parse` },
     ];
   },
 }

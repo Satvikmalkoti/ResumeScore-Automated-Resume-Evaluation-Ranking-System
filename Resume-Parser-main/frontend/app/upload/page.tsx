@@ -1,8 +1,9 @@
 "use client"
+import Link from "next/link"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
+import AppNav from "@/components/app-nav"
 
 export default function UploadPage() {
     const [files, setFiles] = useState<File[]>([])
@@ -25,7 +26,7 @@ export default function UploadPage() {
         formData.append("job_description", jobDescription)
 
         try {
-            const response = await fetch("http://localhost:8000/match-job", {
+            const response = await fetch("/api/match-job", {
                 method: "POST",
                 body: formData,
             })
@@ -48,17 +49,7 @@ export default function UploadPage() {
     return (
         <div className="bg-background-light min-h-screen text-brutal-black font-sans p-8 grid-pattern opacity-100">
             <div className="max-w-6xl mx-auto">
-                <header className="flex justify-between items-center mb-12">
-                    <Link href="/" className="flex items-center gap-2 group cursor-pointer">
-                        <div className="size-10 bg-brutal-black flex items-center justify-center rounded-xl text-white">
-                            <span className="material-symbols-outlined text-2xl">auto_awesome</span>
-                        </div>
-                        <span className="text-xl font-black uppercase tracking-tighter">ResumeRanker</span>
-                    </Link>
-                    <div className="flex gap-4">
-                        <Link href="/analytics" className="px-6 py-2 font-black uppercase tracking-widest border-2 border-brutal-black bg-white shadow-hard hover:-translate-y-0.5 hover:shadow-hard-lg transition-all">Analytics</Link>
-                    </div>
-                </header>
+                <AppNav className="mb-12" />
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Left: Upload and Config */}

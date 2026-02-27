@@ -2,19 +2,45 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import AppNav from "@/components/app-nav"
 import { BarChart, Bar, XAxis, ResponsiveContainer, Cell, Tooltip } from 'recharts'
 
 export default function GraphPage() {
     const [data, setData] = useState<any>(null)
+    const [checkedStorage, setCheckedStorage] = useState(false)
 
     useEffect(() => {
         const stored = sessionStorage.getItem("results")
         if (stored) setData(JSON.parse(stored))
+        setCheckedStorage(true)
     }, [])
 
+    if (!checkedStorage) return (
+        <div className="flex items-center justify-center min-h-screen bg-background-light">
+            <div className="text-4xl font-black uppercase tracking-tighter animate-pulse">Loading Graph...</div>
+        </div>
+    )
+
     if (!data) return (
-        <div className="flex items-center justify-center min-h-screen bg-brutal-black text-white">
-            <div className="text-4xl font-black uppercase tracking-tighter animate-pulse">Mapping Dimensions...</div>
+        <div className="bg-background-light min-h-screen text-brutal-black font-sans p-8">
+            <div className="max-w-7xl mx-auto">
+                <AppNav className="mb-16 px-4" />
+                <div className="brutalist-card bg-white p-10 border-4 text-center">
+                    <div className="text-4xl font-black uppercase tracking-tighter mb-4">No Graph Data</div>
+                    <p className="max-w-xl mx-auto font-bold uppercase tracking-widest text-slate-400 mb-10">
+                        Upload a candidate pool to generate correlation views.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <Link href="/upload" className="brutalist-button-primary text-sm py-4 px-10">
+                            Upload Pool
+                        </Link>
+                        <Link href="/analytics" className="brutalist-button text-sm py-4 px-10">
+                            Analytics
+                        </Link>
+                    </div>
+                </div>
+            </div>
+            <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
         </div>
     )
 
@@ -28,19 +54,19 @@ export default function GraphPage() {
     return (
         <div className="bg-background-light min-h-screen text-brutal-black font-sans p-8">
             <div className="max-w-7xl mx-auto">
-                <header className="flex justify-between items-center mb-20 px-4">
-                    <Link href="/" className="flex items-center gap-2">
-                        <div className="size-10 bg-brutal-black flex items-center justify-center rounded-xl text-white">
-                            <span className="material-symbols-outlined text-2xl">auto_awesome</span>
+                <AppNav
+                    className="mb-20 px-4"
+                    rightSlot={
+                        <div className="hidden md:flex items-center gap-3">
+                            <div className="bg-brutal-black text-white px-4 py-2 font-black uppercase tracking-widest text-xs rounded-full border-2 border-brutal-black">
+                                Deep Graph
+                            </div>
+                            <button className="brutalist-button text-xs py-2">
+                                Export JSON
+                            </button>
                         </div>
-                        <span className="text-xl font-black uppercase tracking-tighter italic">ResumeRanker // Deep Graph</span>
-                    </Link>
-                    <div className="flex items-center gap-6">
-                        <Link href="/analytics" className="text-xs font-black uppercase tracking-widest hover:text-primary transition-colors">Overview</Link>
-                        <Link href="/results" className="text-xs font-black uppercase tracking-widest hover:text-primary transition-colors">Candidates</Link>
-                        <button className="bg-brutal-black text-white px-6 py-2 font-black uppercase tracking-widest text-xs shadow-hard hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">Export JSON</button>
-                    </div>
-                </header>
+                    }
+                />
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 px-4 mb-20">
                     {/* Main Graph Area */}
