@@ -1,0 +1,137 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #F4F4F4;
+  --foreground: #141414;
+  --primary: #1970c2;
+  --primary-foreground: #FFFFFF;
+  --border: #141414;
+  --card: #FFFFFF;
+  --card-foreground: #141414;
+  --radius: 0px;
+  /* Brutalist sharp edges */
+}
+
+@theme inline {
+  --color-primary: var(--primary);
+  --color-background-light: #F4F4F4;
+  --color-background-dark: #111921;
+  --color-brutal-black: #141414;
+
+  --shadow-hard: 4px 4px 0px 0px #141414;
+  --shadow-hard-lg: 8px 8px 0px 0px #141414;
+}
+
+@layer components {
+  .brutalist-card {
+    @apply border-2 border-brutal-black bg-white shadow-hard transition-transform active:translate-x-1 active:translate-y-1 active:shadow-none;
+  }
+
+  .brutalist-button {
+    @apply border-2 border-brutal-black bg-white px-6 py-2 font-black uppercase tracking-widest shadow-hard hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard-lg active:translate-x-1 active:translate-y-1 active:shadow-none transition-all;
+  }
+
+  .brutalist-button-primary {
+    @apply border-2 border-brutal-black px-6 py-2 font-black uppercase tracking-widest shadow-hard hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard-lg active:translate-x-1 active:translate-y-1 active:shadow-none transition-all bg-primary text-white;
+  }
+
+  .brutalist-input {
+    @apply border-2 border-brutal-black rounded-none px-4 py-2 focus:ring-0 focus:border-primary bg-white font-bold uppercase;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-brutal-black;
+  }
+
+  body {
+    @apply bg-background-light text-brutal-black font-sans;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-black uppercase tracking-tighter;
+  }
+}
+
+.grid-pattern {
+  background-image: radial-gradient(#262626 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Added print-specific styles for better printing experience */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .bg-gray-50 {
+    background: white !important;
+  }
+
+  .bg-white {
+    background: white !important;
+  }
+
+  .shadow-sm {
+    box-shadow: none !important;
+  }
+
+  .border-b {
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+
+  header {
+    border-bottom: 2px solid #2563eb !important;
+    margin-bottom: 20px !important;
+  }
+
+  .text-blue-600 {
+    color: #2563eb !important;
+  }
+
+  .bg-blue-100 {
+    background: #dbeafe !important;
+  }
+
+  .text-blue-800 {
+    color: #1e40af !important;
+  }
+
+  .bg-green-100 {
+    background: #dcfce7 !important;
+  }
+
+  .text-green-800 {
+    color: #166534 !important;
+  }
+
+  .bg-purple-100 {
+    background: #f3e8ff !important;
+  }
+
+  .text-purple-800 {
+    color: #6b21a8 !important;
+  }
+
+  .bg-yellow-100 {
+    background: #fef3c7 !important;
+  }
+
+  .text-yellow-800 {
+    color: #92400e !important;
+  }
+}
