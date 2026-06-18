@@ -53,8 +53,7 @@ This project automatically extracts key information from resumes and converts un
 | Metric    | Score      |
 | --------- | ---------- |
 | Precision | 96.85%     |
-| Recall    | 96.69%     |
-| F1-Score  | **96.77%** |
+
 
 ---
 
