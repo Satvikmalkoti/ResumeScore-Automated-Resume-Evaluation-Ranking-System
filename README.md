@@ -1,10 +1,10 @@
-# 🤖 End-to-End Resume AI Parser
+# 🤖 End-to-End Resume AI Evaluation System
 
 An end-to-end AI-powered resume parsing system that extracts structured information from resumes in **PDF, DOCX, and TXT** formats.
 
 The system leverages a fine-tuned **RoBERTa-base Transformer model** using **spaCy Transformers**, served through a **FastAPI backend** and an intuitive **React frontend**.
 
-**Achieved 96.77% F1-score on Resume Entity Recognition.**
+ 
 
 ---
 
@@ -289,14 +289,12 @@ curl -X POST "http://localhost:8000/parse" \
 ## 👨‍💻 Author
 
 **Satvik Malkoti**
-
 B.Tech (Information Technology)
-Machine Learning • NLP • Full-Stack Development
+• Full-Stack Development
+
+**Nishkarsh Pandey**
+Machine Learning • NLP 
 
 ---
 
-## 📜 License
 
-This project is licensed under the MIT License.
-
-Feel free to fork, improve, and contribute.
