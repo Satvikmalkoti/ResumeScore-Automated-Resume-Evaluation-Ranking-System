@@ -29,18 +29,6 @@ This project automatically extracts key information from resumes and converts un
 
 ---
 
-## 📊 Model Performance
-
-### Dataset Statistics
-
-| Metric                   | Value      |
-| ------------------------ | ---------- |
-| Total Resumes            | 60         |
-| Total Annotated Entities | 1,555      |
-| Training Set             | 42 Resumes |
-| Validation Set           | 8 Resumes  |
-| Test Set                 | 10 Resumes |
-
 ### Model Details
 
 * **Architecture:** RoBERTa-base
